@@ -18,6 +18,7 @@ requirements:
     - cython
     - pillow
     - matplotlib
+    - importlib_resources
 
   run:
     - python 3.6.*
