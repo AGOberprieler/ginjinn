@@ -2,19 +2,21 @@ package:
   name: ginjinn
   version: 0.1
 
-# source:
+source:
 #   git_rev:
-#   git_url:
+  git_url: https://github.com/AGOberprieler/ginjinn
 
 requirements:
   build:
     - python 3.6.*
     - setuptools
     - protobuf 3.8.*
+    - tensorflow_models
 
   run:
     - python 3.6.*
     - protobuf 3.8.*
+    - tensorflow_models
 
 # test:
 #   imports:
