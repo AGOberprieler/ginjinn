@@ -1,7 +1,7 @@
-pip
-cython
-pillow
-matplotlib
-setuptools
-protobuf>=3.8,<3.9
-numpy
+# pip
+# cython
+# pillow
+# matplotlib
+# setuptools
+# protobuf>=3.8,<3.9
+# numpy

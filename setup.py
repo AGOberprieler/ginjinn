@@ -15,8 +15,9 @@ DESCRIPTION='Object detection pipeline for the extraction of structures from her
 
 def install_requires():
     '''Get requirements from requirements.txt'''
-    with open('requirements.txt') as f:
-        return f.read().splitlines()
+    # with open('requirements.txt') as f:
+    #     return f.read().splitlines()
+    return []
 
 setup(
     name='ginjinn',
