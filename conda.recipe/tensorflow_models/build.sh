@@ -1,7 +1,14 @@
 #!/bin/bash
 
-## go to the src dir
-cp $SRC_DIR/
+## copy tensorflow/models to conda environment
+cp -r $SRC_DIR/models $CONDA_PREFIX/models
 
-## copy binary to bin
-cp ./structure $PREFIX/tensorflow
+## compile protobuf files
+START_DIR=`pwd`
+cd $CONDA_PREFIX/models/research
+protoc --python_out=. ./object_detection/protos/*.proto
+cd $START_DIR
+
+## copy pycocotools to tensorflow/models/research
+cp -r $SRC_DIR/cocoapi/PythonAPI/pycocotools $CONDA_PREFIX/models/research/pycocotools
+
