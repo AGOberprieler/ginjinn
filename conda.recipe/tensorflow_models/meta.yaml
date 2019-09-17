@@ -1,0 +1,40 @@
+package:
+  name: tensorflow_models
+  version: 1.11
+
+source:
+  - git_url: https://github.com/TankredO/models
+    folder: models
+  - git_url: https://github.com/cocodataset/cocoapi
+    folder: cocoapi
+
+
+build:
+  skip_compile_pyc:
+    - "*"
+
+requirements:
+  build:
+    - python 3.6.*
+    - cython
+    - pillow
+    - matplotlib
+    - setuptools
+    - protobuf 3.8.*
+    - numpy
+
+  run:
+    - python 3.6.*
+    - cython
+    - pillow
+    - matplotlib
+    - setuptools
+    - protobuf 3.8.*
+    - numpy
+
+# test:
+#   imports:
+#     -
+
+# about:
+#   home:
