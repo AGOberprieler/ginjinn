@@ -27,6 +27,7 @@ requirements:
     - numpy
     - pandas
     - matplotlib
+    - cycler
 
 build:
   entry_points:
