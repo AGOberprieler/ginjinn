@@ -3,7 +3,7 @@
 import sys
 import os
 import platform
-import pathlib import Path
+from pathlib import Path
 
 CONDA_PREFIX = os.environ.get('CONDA_PREFIX')
 

@@ -32,5 +32,12 @@ setup(
         'console_scripts': [
             'ginjinn = ginjinn.__main__:main',
         ]
+    },
+    package_data={
+        'ginjinn': [
+            'data_files/*.yaml',
+            'data_files/tf_config_templates/*.config',
+            'data_files/*',
+        ],
     }
 )

@@ -1,0 +1,62 @@
+# ATTENTION: YAML is whitespace sensitive
+
+# == Data configuration ==
+# path to directory containing annotations (xml) or path of the VIA JSON annotations
+annotation_path: "ENTER PATH HERE"
+# annotation type. ["PascalVOC", "VIA"]
+annotation_type: "PascalVOC" 
+
+# path to directory containing images (jpeg, png)
+image_dir: "ENTER PATH HERE"
+
+# fraction of the data that should be used for evaluation [0.0-1.0]
+test_fraction: 0.25
+
+
+# == Model configuration ==
+# name of the object detection model
+model_name: "ENTER MODEL NAME HERE"
+
+# whether a pretrained model checkpoint should be used
+use_checkpoint: true
+# path to pretrained model checkpoint. If empty and use_checkpoint is true
+# a pretrained checkpoint will be downloaded, if available.
+checkpoint_path: ""
+
+
+# == Training and evalution configuration ==
+# number of training iterations
+n_iter: 5000
+
+# number of images to evaluate at once
+batch_size: 1
+
+
+# == Augmentation configuration ==
+# augmentation can artificially "increase" your sample size by
+# modifying the image before training. This can improve the robustness
+# of the trained model, but increases the number of interations that is
+# required for the model to converge and also increases the computation
+# time. Augmentation is randomly applied to images.
+augmentation:
+    # flip images horizontally
+    flip_horizontal: true
+    # flip images vertically
+    flip_vertical: true
+    # flip by 90 degrees
+    flip_90: true
+    
+    
+    ## change brightness
+    #change_brightness:
+    #    min_delta: 0.1
+    #    max_delta: 0.2
+
+    ## change contrast
+    #change_contrast:
+    #    min_delta: 0.8
+    #    max_delta: 1.25
+
+    ## jitter bounding boxes
+    #jitter_boxes:
+    #    ratio: 0.05
