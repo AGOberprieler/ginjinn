@@ -12,11 +12,15 @@ requirements:
     - setuptools
     - protobuf 3.8.*
     - tensorflow_models
+    - numpy
+    - pandas
 
   run:
     - python 3.6.*
     - protobuf 3.8.*
     - tensorflow_models
+    - numpy
+    - pandas
 
 # test:
 #   imports:
