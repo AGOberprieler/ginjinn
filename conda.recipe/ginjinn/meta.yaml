@@ -26,6 +26,7 @@ requirements:
     - numpy
     - pandas
     - matplotlib
+    - importlib_resources
 
 build:
   entry_points:
