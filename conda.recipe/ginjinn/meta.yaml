@@ -27,6 +27,10 @@ requirements:
     - pandas
     - matplotlib
 
+build:
+  entry_points:
+    - ginjinn = ginjinn.__main__:main
+
 # test:
 #   imports:
 #     -
