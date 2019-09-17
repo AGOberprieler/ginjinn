@@ -8,9 +8,9 @@ source:
 
 requirements:
   build:
-    - python 3.6.*
+    - python 3.6
     - setuptools
-    - protobuf 3.8.*
+    - protobuf 3.8
     - tensorflow_models
     - numpy
     - pandas
@@ -21,8 +21,8 @@ requirements:
     - importlib_resources
 
   run:
-    - python 3.6.*
-    - protobuf 3.8.*
+    - python 3.6
+    - protobuf 3.8
     - tensorflow_models
     - numpy
     - pandas
