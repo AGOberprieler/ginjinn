@@ -14,6 +14,10 @@ requirements:
     - tensorflow_models
     - numpy
     - pandas
+    - pip
+    - cython
+    - pillow
+    - matplotlib
 
   run:
     - python 3.6.*
@@ -21,6 +25,7 @@ requirements:
     - tensorflow_models
     - numpy
     - pandas
+    - matplotlib
 
 # test:
 #   imports:
