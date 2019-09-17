@@ -9,7 +9,7 @@ with open('ginjinn/__init__.py', 'r') as f:
         r"^__version__ = ['\"]([^'\"]*)['\"]",
         f.read(),
         re.M
-    )
+    ).group(1)
 
 DESCRIPTION='Object detection pipeline for the extraction of structures from herbarium specimens'
 
