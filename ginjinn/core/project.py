@@ -63,6 +63,7 @@ class Project:
             'export_dir': str(project_path.joinpath('export').resolve()),
             'config_path': str(project_path.joinpath('config.yaml').resolve()),
             'project_json': str(project_path.joinpath('project.json').resolve()),
+            'current_step': 0,
             'annotation_path': DEFAULTS.annotation_path,
             'annotation_type': DEFAULTS.annotation_type,
             'image_dir': DEFAULTS.image_dir,
@@ -148,3 +149,4 @@ class Project:
     #     template = resources.read_text(data_files, 'config_template.yaml')
     #     with open(fpath, 'w') as f:
     #         f.write(template)
+

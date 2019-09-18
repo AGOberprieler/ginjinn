@@ -12,7 +12,7 @@ requirements:
     - setuptools
     - protobuf 3.8.*
     - tensorflow_models
-    - numpy
+    - numpy 1.16.*
     - pandas
     - pip
     - cython
@@ -20,16 +20,20 @@ requirements:
     - matplotlib
     - importlib_resources
     - jinja2
+    - scikit-learn
+    - tqdm
 
   run:
     - python 3.6.*
     - protobuf 3.8.*
     - tensorflow_models
-    - numpy
+    - numpy 1.16.*
     - pandas
     - matplotlib
     - importlib_resources
     - jinja2
+    - scikit-learn
+    - tqdm
 
 build:
   entry_points:
