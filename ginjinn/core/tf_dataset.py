@@ -137,6 +137,33 @@ class TFDataset:
         #     raise DatasetNotReadyError('Dataset is not ready. Run Dataset.construct_dataset first.')
         return self.config.ready
 
+    @classmethod
+    def from_directory(cls, dataset_dir):
+        dataset = cls(dataset_dir)
+        dataset.load_json()
+        return dataset
+
+    @property
+    def record_train_path(self):
+        if self.is_ready():
+            return self.config.record_train_path
+        else:
+            return None
+
+    @property
+    def record_eval_path(self):
+        if self.is_ready():
+            return self.config.record_eval_path
+        else:
+            return None
+    
+    @property
+    def labelmap_path(self):
+        if self.is_ready():
+            return self.config.labelmap_path
+        else:
+            return None
+
     @property
     def n_classes(self):
         if self.is_ready():
