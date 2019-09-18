@@ -51,12 +51,23 @@ class TFDataset:
             Build dataset from annotated images and split into test and evaluation datasets
         '''
         
-        # update configuration
-        annotation_type = annotation_type.lower()
-        self.config.annotation_type = annotation_type
+        # update configuration (but do not save it to file yet)
+        self.config.annotation_type = annotation_type.lower()
         self.config.annotations_path = str(Path(annotations_path).resolve())
         self.config.image_dir = str(Path(image_dir).resolve())
         self.config.test_fraction = test_fraction
+
+        print(self.config.annotations_path)
+        print(self.config.image_dir)
+        
+
+        # check if input files exist
+        if not Path(self.config.annotations_path).exists():
+            msg = f'Cannot find annotations path "{self.config.annotations_path}".'
+            raise Exception(msg)
+        if not Path(self.config.image_dir).exists():
+            msg = f'Cannot find image directory "{self.config.image_dir}".'
+            raise Exception(msg)
 
         # create dataset directory if it does not exist
         Path(self.config.dataset_dir).mkdir(exist_ok=True)
@@ -99,6 +110,23 @@ class TFDataset:
         self.config.ready = True
         self.to_json()
 
+    def cleanup_dataset_dir(self):
+        ''' Deletes the dataset directory '''
+
+        # remove the files create by construct_dataset
+        for fpath in self._dataset_files:
+            path = Path(fpath)
+            if path.exists():
+                path.unlink()
+        
+        # remove dataset directory
+        path = Path(self.config.dataset_dir)
+        if path.exists():
+            path.rmdir()
+
+        self.config.ready = False
+        
+
     def to_json(self, fpath=None):
         '''
             Write configuration json file
@@ -139,6 +167,15 @@ class TFDataset:
 
     @classmethod
     def from_directory(cls, dataset_dir):
+        ''' Load TFDataset object from existing directory
+            The directory must have been successfully built
+            using TFDataset.construct_dataset
+        '''
+
+        # check if dataset_dir exists
+        # TODO: print nicely formatted error
+        Path(dataset_dir).resolve(strict=True)
+
         dataset = cls(dataset_dir)
         dataset.load_json()
         return dataset
@@ -198,6 +235,18 @@ class TFDataset:
             return _get_n_samples_from_csv(self.config.csv_path)
         else:
             return None
+    
+    @property
+    def _dataset_files(self):
+        return [
+            self.config.csv_path,
+            self.config.csv_train_path,
+            self.config.csv_eval_path,
+            self.config.labelmap_path,
+            self.config.record_train_path,
+            self.config.record_eval_path,
+            self.config.dataset_json,
+        ]
 
 
 def _get_classdict_from_labelmap(file_path):

@@ -2,12 +2,13 @@
 
 # == Data configuration ==
 # path to directory containing annotations (xml) or path of the VIA JSON annotations
-annotation_path: "{{ config.annotation_path if config.annotation_path else 'ENTER PATH HERE'}}"
+# e.g. /home/me/data/annotations for linux, or C:\Users\me\Documents\annotations for windows
+annotation_path: {{ config.annotation_path }}
 # annotation type. ["PascalVOC", "VIA"]
-annotation_type: "{{ config.annotation_type }}" 
+annotation_type: {{ config.annotation_type }}
 
 # path to directory containing annotated images (jpeg, png)
-image_dir: "{{ config.image_dir if config.image_dir else 'ENTER PATH HERE'}}"
+image_dir: {{ config.image_dir }}
 
 # fraction of the data that should be used for evaluation [0.0-1.0]
 test_fraction: {{ config.test_fraction }}
@@ -16,13 +17,13 @@ test_fraction: {{ config.test_fraction }}
 # == Model configuration ==
 # name of the object detection model
 # (or path to a tensorflow pipeline.config file)
-model_name: "{{ config.model_name }}"
+model_name: {{ config.model_name }}
 
 # whether a pretrained model checkpoint should be used
 use_checkpoint: true
 # path to pretrained model checkpoint. If empty and use_checkpoint is true
 # a pretrained checkpoint will be downloaded, if available.
-checkpoint_path: "{{ config.checkpoint_path }}"
+checkpoint_path: {{ config.checkpoint_path }}
 
 
 # == Training and evalution configuration ==
