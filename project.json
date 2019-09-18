@@ -1,0 +1,42 @@
+{
+    "project_dir": "C:\\Users\\LocalAdmin\\Desktop\\Ott_Tankred_PhD\\object_detection\\GinJinn",
+    "data_dir": "C:\\Users\\LocalAdmin\\Desktop\\Ott_Tankred_PhD\\object_detection\\GinJinn\\data",
+    "model_dir": "C:\\Users\\LocalAdmin\\Desktop\\Ott_Tankred_PhD\\object_detection\\GinJinn\\model",
+    "export_dir": "C:\\Users\\LocalAdmin\\Desktop\\Ott_Tankred_PhD\\object_detection\\GinJinn\\export",
+    "config_path": "C:\\Users\\LocalAdmin\\Desktop\\Ott_Tankred_PhD\\object_detection\\GinJinn\\config.yaml",
+    "project_json": "C:\\Users\\LocalAdmin\\Desktop\\Ott_Tankred_PhD\\object_detection\\GinJinn\\project.json",
+    "annotation_path": "",
+    "annotation_type": "PascalVOC",
+    "image_dir": "",
+    "test_fraction": 0.25,
+    "model_name": "faster_rcnn_inception_v2_coco",
+    "use_checkpoint": true,
+    "checkpoint_path": "",
+    "n_iter": 5000,
+    "batch_size": 1,
+    "augmentation": {
+        "flip_horizontal": {
+            "active": true
+        },
+        "flip_vertical": {
+            "active": true
+        },
+        "flip_90": {
+            "active": true
+        },
+        "change_brightness": {
+            "active": false,
+            "min_delta": 0.1,
+            "max_delta": 0.2
+        },
+        "change_contrast": {
+            "active": false,
+            "min_delta": 0.8,
+            "max_delta": 1.25
+        },
+        "jitter_boxes": {
+            "active": false,
+            "ratio": 0.05
+        }
+    }
+}

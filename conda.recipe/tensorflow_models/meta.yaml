@@ -15,21 +15,21 @@ build:
 
 requirements:
   build:
-    - python 3.6
+    - python 3.6.*
     - cython
     - pillow
     - matplotlib
     - setuptools
-    - protobuf 3.8
+    - protobuf 3.8.*
     - numpy
 
   run:
-    - python 3.6
+    - python 3.6.*
     - cython
     - pillow
     - matplotlib
     - setuptools
-    - protobuf 3.8
+    - protobuf 3.8.*
     - numpy
 
 # test:

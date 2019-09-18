@@ -8,7 +8,7 @@ class Configuration(OrderedDict):
         od = OrderedDict(*args, **kwargs)
         for key, val in od.items():
             if isinstance(val, Mapping):
-                value = DotDict(val)
+                value = Configuration(val)
             else:
                 value = val
             self[key] = value

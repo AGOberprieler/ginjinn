@@ -1,5 +1,6 @@
 import importlib_resources as resources
 import yaml
+import json
 import jinja2
 from jinja2 import Template
 from pathlib import Path
@@ -10,13 +11,13 @@ from ginjinn.core import Configuration
 
 ''' Default configuration for ginjinn Project object. '''
 DEFAULTS = Configuration({
-    'annotation_path': None,
+    'annotation_path': '',
     'annotation_type': 'PascalVOC',
-    'image_dir': None,
+    'image_dir': '',
     'test_fraction': 0.25,
     'model_name': 'faster_rcnn_inception_v2_coco',
     'use_checkpoint': True,
-    'checkpoint_path': None,
+    'checkpoint_path': '',
     'n_iter': 5000,
     'batch_size': 1,
     'augmentation': {
@@ -53,13 +54,15 @@ class Project:
     evalution, export and inference.
     '''
     def __init__(self, project_dir):
+        project_path = Path(project_dir).resolve()
+
         self.config = Configuration({
-            'project_dir': str(Path(project_dir).resolve()),
-            'data_dir': str(Path(project_dir).joinpath('data').resolve()),
-            'model_dir': str(Path(project_dir).joinpath('model').resolve()),
-            'export_dir': str(Path(project_dir).joinpath('export').resolve()),
-            'config_path': str(Path(project_dir).joinpath('config.yaml').resolve()),
-            'project_json': str(Path(project_dir).joinpath('project.json').resolve()),
+            'project_dir': str(project_path),
+            'data_dir': str(project_path.joinpath('data').resolve()),
+            'model_dir': str(project_path.joinpath('model').resolve()),
+            'export_dir': str(project_path.joinpath('export').resolve()),
+            'config_path': str(project_path.joinpath('config.yaml').resolve()),
+            'project_json': str(project_path.joinpath('project.json').resolve()),
             'annotation_path': DEFAULTS.annotation_path,
             'annotation_type': DEFAULTS.annotation_type,
             'image_dir': DEFAULTS.image_dir,
@@ -97,10 +100,41 @@ class Project:
         })
 
     def write_config(self):
-        template = Template(resources.read_text(data_files, 'config_template_jinja.yaml'))
+        '''
+            Write user-facing configuration yaml file
+        '''
+        template = Template(resources.read_text(data_files, 'config_template_jinja2.yaml'))
         rendered_template = template.render(config=self.config)
         with open(self.config.config_path, 'w') as f:
             f.write(rendered_template)
+
+    def load_config(self):
+        '''
+            Update configuration from user-facing configuration yaml file
+        '''
+        with open(self.config.config_path) as f:
+            try:
+                _config = yaml.safe_load(f)
+            except yaml.YAMLError as e:
+                print(e)
+        
+        self.config.update(_config)
+
+    def to_json(self, fpath=None):
+        '''
+            Write internal configuration json file
+        '''
+        fpath = fpath or self.config.project_json
+        with open(fpath, 'w') as f:
+            json.dump(self.config, f, indent=4)
+    
+    def load_json(self, fpath=None):
+        '''
+            Replace configuration with configuration from json file
+        '''
+        fpath = fpath or self.config.project_json
+        with open(fpath) as f:
+            self.config = Configuration(json.load(f))
 
 
     # @staticmethod

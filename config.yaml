@@ -21,7 +21,7 @@ model_name: "faster_rcnn_inception_v2_coco"
 use_checkpoint: true
 # path to pretrained model checkpoint. If empty and use_checkpoint is true
 # a pretrained checkpoint will be downloaded, if available.
-checkpoint_path: "None"
+checkpoint_path: ""
 
 
 # == Training and evalution configuration ==

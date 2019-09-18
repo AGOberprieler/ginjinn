@@ -6,7 +6,7 @@ annotation_path: "{{ config.annotation_path if config.annotation_path else 'ENTE
 # annotation type. ["PascalVOC", "VIA"]
 annotation_type: "{{ config.annotation_type }}" 
 
-# path to directory containing images (jpeg, png)
+# path to directory containing annotated images (jpeg, png)
 image_dir: "{{ config.image_dir if config.image_dir else 'ENTER PATH HERE'}}"
 
 # fraction of the data that should be used for evaluation [0.0-1.0]
@@ -15,6 +15,7 @@ test_fraction: {{ config.test_fraction }}
 
 # == Model configuration ==
 # name of the object detection model
+# (or path to a tensorflow pipeline.config file)
 model_name: "{{ config.model_name }}"
 
 # whether a pretrained model checkpoint should be used
