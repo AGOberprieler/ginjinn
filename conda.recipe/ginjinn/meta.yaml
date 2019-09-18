@@ -19,6 +19,7 @@ requirements:
     - pillow
     - matplotlib
     - importlib_resources
+    - jinja2
 
   run:
     - python 3.6
@@ -28,6 +29,7 @@ requirements:
     - pandas
     - matplotlib
     - importlib_resources
+    - jinja2
 
 build:
   entry_points:
