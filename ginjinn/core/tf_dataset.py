@@ -1,4 +1,3 @@
-import tensorflow as tf
 import xml.etree.ElementTree as ET
 import pandas as pd
 import glob
@@ -394,6 +393,7 @@ def __split(df, group):
 
 
 def create_tf_example(group, path, class_dict):
+    import tensorflow as tf
     with tf.io.gfile.GFile(os.path.join(path, '{}'.format(group.filename)),
                         'rb') as fid:
         encoded_jpg = fid.read()
@@ -486,6 +486,7 @@ def class_dict_from_pbtxt(pbtxt_path):
     return class_dict
 
 def generate_tfrecord(annotations_file, labelmap_file, image_dir, output_path):
+    import tensorflow as tf
     class_dict = class_dict_from_pbtxt(labelmap_file)
 
     writer = tf.io.TFRecordWriter(output_path)
