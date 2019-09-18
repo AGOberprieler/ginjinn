@@ -22,6 +22,7 @@ requirements:
     - jinja2
     - scikit-learn
     - tqdm
+    - pyyaml
 
   run:
     - python 3.6.*
@@ -34,6 +35,7 @@ requirements:
     - jinja2
     - scikit-learn
     - tqdm
+    - pyyaml
 
 build:
   entry_points:
