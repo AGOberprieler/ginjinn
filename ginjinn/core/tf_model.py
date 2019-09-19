@@ -340,6 +340,39 @@ class TFModel:
 
         return fpath
 
+    def _construct_exportscript_sh(self, checkpoint_name, input_type='image_tensor', fpath=None):
+        fpath = fpath or self.config.exportscript_sh_path
+        template = resources.read_text(tf_script_templates, 'exportscript.sh')
+        template = template.replace('<TF_RESEARCH_PATH>', str(Path(config.RESEARCH_PATH).as_posix()))
+        template = template.replace('<TF_SLIM_PATH>', str(Path(config.SLIM_PATH).as_posix()))
+        template = template.replace('<MODEL_DIR>', str(Path(self.config.model_dir).as_posix()))
+        # TODO: MODEL_CHECKPOINT_PREFIX
+        # TODO: EXPORT_DIR
+        template = template.replace('<INPUT_TYPE>', input_type)
+
+        with Path(fpath).open('w') as f:
+            f.write(template)
+        
+        os.chmod(fpath, 0o755)
+
+        return fpath
+        
+    def _construct_exportscript_cmd(self, checkpoint_name, input_type='image_tensor', fpath=None):
+        fpath = fpath or self.config.exportscript_cmd_path
+        template = resources.read_text(tf_script_templates, 'exportscript.cmd')
+        template = template.replace('<TF_RESEARCH_PATH>', str(PureWindowsPath(config.RESEARCH_PATH)))
+        template = template.replace('<TF_SLIM_PATH>', str(PureWindowsPath(config.SLIM_PATH)))
+        template = template.replace('<MODEL_DIR>', str(PureWindowsPath(self.config.model_dir)))
+        # TODO: MODEL_CHECKPOINT_PREFIX
+        # TODO: EXPORT_DIR
+        template = template.replace('<INPUT_TYPE>', input_type)
+
+        with Path(fpath).open('w') as f:
+            f.write(template)
+        
+        os.chmod(fpath, 0o755)
+
+        return fpath
 
 def _get_classdict_from_labelmap(file_path):
     from object_detection.utils import label_map_util
