@@ -9,6 +9,9 @@ cd $CONDA_PREFIX/models/research
 protoc --python_out=. ./object_detection/protos/*.proto
 cd $START_DIR
 
-## copy pycocotools to tensorflow/models/research
+## build copy pycocotools to tensorflow/models/research
+START_DIR=`pwd`
+cd $SRC_DIR/cocoapi/PythonAPI
+make
 cp -r $SRC_DIR/cocoapi/PythonAPI/pycocotools $CONDA_PREFIX/models/research/pycocotools
-
+cd $START_DIR
