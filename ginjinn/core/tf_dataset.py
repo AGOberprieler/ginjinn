@@ -10,7 +10,6 @@ from sklearn.model_selection import train_test_split
 from collections import namedtuple, OrderedDict
 from tqdm import tqdm
 from PIL import Image
-from object_detection.utils import dataset_util, label_map_util
 
 from ginjinn.core import Configuration
 
@@ -394,6 +393,8 @@ def __split(df, group):
 
 def create_tf_example(group, path, class_dict):
     import tensorflow as tf
+    from object_detection.utils import dataset_util
+
     with tf.io.gfile.GFile(os.path.join(path, '{}'.format(group.filename)),
                         'rb') as fid:
         encoded_jpg = fid.read()
