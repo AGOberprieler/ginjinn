@@ -179,7 +179,7 @@ class TFModel:
                     should_dl_ckpt = True
         
         # create model dir
-        Path(self.config.model_dir).mkdir()
+        Path(self.config.model_dir).mkdir(exist_ok=True)
 
         # download model
         if should_dl_ckpt:

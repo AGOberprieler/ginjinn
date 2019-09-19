@@ -8,7 +8,8 @@ from pathlib import Path
 from ginjinn import data_files
 from ginjinn import config
 from ginjinn.core import Configuration
-from ginjinn.core.tf_dataset import TFDataset
+from ginjinn.core.tf_dataset import TFDataset, DatasetNotReadyError
+from ginjinn.core.tf_model import TFModel, ModelNotReadyError
 
 ''' Default configuration for ginjinn Project object. '''
 DEFAULTS = Configuration({
@@ -16,7 +17,7 @@ DEFAULTS = Configuration({
     'annotation_type': 'PascalVOC',
     'image_dir': 'ENTER PATH HERE',
     'test_fraction': 0.25,
-    'model_name': 'faster_rcnn_inception_v2_coco',
+    'model': 'faster_rcnn_inception_v2_coco',
     'use_checkpoint': True,
     'checkpoint_path': '',
     'n_iter': 5000,
@@ -77,7 +78,7 @@ class Project:
             'annotation_type': DEFAULTS.annotation_type,
             'image_dir': DEFAULTS.image_dir,
             'test_fraction': DEFAULTS.test_fraction,
-            'model_name': DEFAULTS.model_name,
+            'model': DEFAULTS.model,
             'use_checkpoint': DEFAULTS.use_checkpoint,
             'checkpoint_path': DEFAULTS.checkpoint_path,
             'n_iter': DEFAULTS.n_iter,
@@ -184,22 +185,14 @@ class Project:
                 raise Exception()
 
         self.config.ready = False
-    
-    def cleanup_dataset_dir(self):
-        ''' Remove project directory '''
-        # cleanup dataset dir
-        dataset = self._load_dataset()
-        if dataset:
-            dataset.cleanup_dataset_dir()
 
-    # ==
-    # Dataset
-    # ==
     def is_ready(self):
         # TODO: Maybe check whether configuration files exist instead of storing ready state in config?
         #       Might be more robust
         return self.config.ready
-    
+    # ==
+    # Dataset
+    # ==
     def setup_dataset(self):
         ''' Prepare input files for Tensorflow. This builds a dataset directory. '''
         # check if project is set up
@@ -221,6 +214,61 @@ class Project:
         if dataset:
             return dataset.is_ready()
         return False
+
+    def cleanup_dataset_dir(self):
+        ''' Remove project directory '''
+        # cleanup dataset dir
+        dataset = self._load_dataset()
+        if dataset:
+            dataset.cleanup_dataset_dir()
+    # ==
+
+    # ==
+    # Model
+    # ==
+    def setup_model(self):
+        self._assert_project_is_ready()
+        
+        dataset = self._load_dataset()
+        if not dataset:
+            raise DatasetNotReadyError('Dataset not ready. Run Project.setup_dataset first')
+
+        model = TFModel(self.config.model_dir)
+        model.construct_model(
+            self.config.model,
+            dataset.config.record_train_path,
+            dataset.config.record_eval_path,
+            dataset.config.labelmap_path,
+            self.config.checkpoint_path,
+            self.config.use_checkpoint,
+            self.config.augmentation,
+            self.config.n_iter,
+            self.config.batch_size,
+        )
+
+    def is_ready_model(self):
+        # check if project is set up
+        self._assert_project_is_ready()
+
+        model = self._load_model()
+        if model:
+            return model.is_ready()
+        return False
+    
+    def cleanup_model_dir(self):
+        ''' Remove project directory '''
+        # cleanup dataset dir
+        model = self._load_model()
+        if model:
+            model.cleanup_model_dir()
+
+    def train_and_eval(self):
+        self._assert_project_is_ready()
+        self._assert_dataset_is_ready()
+        self._assert_model_is_ready()
+
+        model = self._load_model()
+        model.train_and_eval()
     # ==
 
     @classmethod
@@ -244,9 +292,27 @@ class Project:
                 'Project directory is not yet set up. Run Project.setup_project_dir first.'
             )
     
+    def _assert_dataset_is_ready(self):
+        if not self.is_ready_dataset():
+            raise DatasetNotReadyError(
+                'Dataset is not set up. Run Project.setup_dataset first.'
+            )
+    
+    def _assert_model_is_ready(self):
+        if not self.is_ready_model():
+            raise ModelNotReadyError(
+                'Model is not set up. Run Project.setup_model first.'
+            )
+    
     def _load_dataset(self):
         try:
             return TFDataset.from_directory(self.config.dataset_dir)
+        except:
+            return None
+    
+    def _load_model(self):
+        try:
+            return TFModel.from_directory(self.config.model_dir)
         except:
             return None
 
