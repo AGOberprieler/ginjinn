@@ -3,6 +3,7 @@ import sys
 import json
 import importlib_resources as resources
 import subprocess
+import shutil
 
 from pathlib import Path, PureWindowsPath
 
@@ -58,6 +59,9 @@ class InvalidCheckpointException(Exception):
     pass
 
 class PlatformNotSupportedError(Exception):
+    pass
+
+class ModelNotReadyError(Exception):
     pass
 
 class TFModel:
@@ -227,6 +231,9 @@ class TFModel:
     
     def train_and_eval(self):
         # TODO: low priority: make output nicer
+        if not self.is_ready():
+            raise ModelNotReadyError('Model is not ready. Run TFModel.construct_model first')
+        
         if config.PLATFORM == 'Windows':
             runscript_path = self.config.runscript_cmd_path
         elif config.PLATFORM == 'Linux':
@@ -261,10 +268,28 @@ class TFModel:
         fpath = fpath or self.config.model_json
         with open(fpath) as f:
             self.config = Configuration(json.load(f))
+    
+    def is_ready(self):
+        '''
+            Check whether model is ready to train.
+            This is the case of model.config and model.json,
+            as well as runscripts are available
+        '''
+        return all([
+            Path(self.config.model_json).exists(),
+            Path(self.config.model_config_path).exists(),
+            Path(self.config.runscript_cmd_path).exists(),
+            Path(self.config.runscript_sh_path).exists(),
+        ])
+
+    def cleanup_model_dir(self):
+        '''
+            Remove model_dir
+        '''
+        shutil.rmtree(self.config.model_dir)
 
     @classmethod
-    def from_directory(cls):
-        def from_directory(cls, model_dir):
+    def from_directory(cls, model_dir):
         ''' Load TFModel object from existing directory
             The directory must have been successfully built
             using TFModel.construct_model
@@ -276,6 +301,7 @@ class TFModel:
 
         model = cls(model_dir)
         model.load_json()
+
         return model
 
     def _construct_runscript_sh(self, fpath=None):

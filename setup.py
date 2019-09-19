@@ -37,6 +37,7 @@ setup(
         'ginjinn': [
             'data_files/*.yaml',
             'data_files/tf_config_templates/*.config',
+            'data_files/tf_script_templates/*',
             'data_files/*',
         ],
     }
