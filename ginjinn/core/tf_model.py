@@ -226,6 +226,7 @@ class TFModel:
         self.to_json()
     
     def train_and_eval(self):
+        # TODO: low priority: make output nicer
         if config.PLATFORM == 'Windows':
             runscript_path = self.config.runscript_cmd_path
         elif config.PLATFORM == 'Linux':
@@ -260,6 +261,22 @@ class TFModel:
         fpath = fpath or self.config.model_json
         with open(fpath) as f:
             self.config = Configuration(json.load(f))
+
+    @classmethod
+    def from_directory(cls):
+        def from_directory(cls, model_dir):
+        ''' Load TFModel object from existing directory
+            The directory must have been successfully built
+            using TFModel.construct_model
+        '''
+
+        # check if dataset_dir exists
+        # TODO: print nicely formatted error
+        Path(model_dir).resolve(strict=True)
+
+        model = cls(model_dir)
+        model.load_json()
+        return model
 
     def _construct_runscript_sh(self, fpath=None):
         fpath = fpath or self.config.runscript_sh_path
