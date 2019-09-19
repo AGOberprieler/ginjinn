@@ -13,6 +13,9 @@ from PIL import Image
 
 from ginjinn.core import Configuration
 
+# import tensorflow as tf
+# from object_detection.utils import dataset_util, labelmap_util
+
 class AnnotationTypeError(Exception):
     ''' Error for wrong annotation type '''
     pass
@@ -161,6 +164,9 @@ class TFDataset:
         ''' returns whether the dataset is ready or not'''
         # if not self.config.ready:
         #     raise DatasetNotReadyError('Dataset is not ready. Run Dataset.construct_dataset first.')
+
+        # TODO: maybe instead of storing ready in config, it might be better to check whether the tfrecord
+        #       files exists every time is_ready is called? This might be more robust?
         return self.config.ready
 
     @classmethod
@@ -248,6 +254,7 @@ class TFDataset:
 
 
 def _get_classdict_from_labelmap(file_path):
+    from object_detection.utils import label_map_util
     return label_map_util.get_label_map_dict(file_path, use_display_name=True)
 
 def _get_n_classes_from_labelmap(file_path):

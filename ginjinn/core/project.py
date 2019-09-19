@@ -192,19 +192,14 @@ class Project:
         if dataset:
             dataset.cleanup_dataset_dir()
 
+    # ==
+    # Dataset
+    # ==
     def is_ready(self):
+        # TODO: Maybe check whether configuration files exist instead of storing ready state in config?
+        #       Might be more robust
         return self.config.ready
     
-    def is_ready_dataset(self):
-        # check if project is set up
-        self._assert_project_is_ready()
-
-        dataset = self._load_dataset()
-        if dataset:
-            return dataset.is_ready()
-        return False
-
-
     def setup_dataset(self):
         ''' Prepare input files for Tensorflow. This builds a dataset directory. '''
         # check if project is set up
@@ -217,6 +212,16 @@ class Project:
             self.config.annotation_type,
             self.config.test_fraction,
         )
+
+    def is_ready_dataset(self):
+        # check if project is set up
+        self._assert_project_is_ready()
+
+        dataset = self._load_dataset()
+        if dataset:
+            return dataset.is_ready()
+        return False
+    # ==
 
     @classmethod
     def from_directory(cls, project_dir):

@@ -23,6 +23,7 @@ requirements:
     - scikit-learn
     - tqdm
     - pyyaml
+    - requests
 
   run:
     - python 3.6.*
@@ -36,6 +37,7 @@ requirements:
     - scikit-learn
     - tqdm
     - pyyaml
+    - requests
 
 build:
   entry_points:

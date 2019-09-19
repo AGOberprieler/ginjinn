@@ -22,6 +22,8 @@ requirements:
     - setuptools
     - protobuf 3.8.*
     - numpy
+    - git
+    - pip
 
   run:
     - python 3.6.*
@@ -31,6 +33,8 @@ requirements:
     - setuptools
     - protobuf 3.8.*
     - numpy
+    - git
+    - pip
 
 # test:
 #   imports:

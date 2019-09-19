@@ -12,3 +12,4 @@ RESEARCH_PATH = str(Path(MODELS_PATH).joinpath('research').resolve())
 SLIM_PATH = str(Path(RESEARCH_PATH).joinpath('slim').resolve())
 
 PLATFORM = platform.system()
+
