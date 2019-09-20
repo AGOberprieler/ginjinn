@@ -49,6 +49,7 @@ PRETRAINED_MODEL_URLS = {
     'ssd_mobilenet_v2_coco': 'http://download.tensorflow.org/models/object_detection/ssdlite_mobilenet_v2_coco_2018_05_09.tar.gz',
     'ssd_inception_v2_coco': 'http://download.tensorflow.org/models/object_detection/ssd_inception_v2_coco_2018_01_28.tar.gz',
 }
+AVAILABLE_MODELS_DOWNLOADABLE = list(PRETRAINED_MODEL_URLS.keys())
 PRETRAINED_MODEL_URLS.update({f'{m}.config':url for m, url in PRETRAINED_MODEL_URLS.items()})
 
 # avoid circular imports

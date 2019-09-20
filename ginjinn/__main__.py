@@ -65,6 +65,7 @@ def main():
         p.setup_model()
         print('Successfully setup model.')
 
+    # train
     elif args.command == 'train':
         p = Project.from_directory(args.project_dir)
         if args.force:
@@ -80,6 +81,7 @@ def main():
 
         print('Successfully trained model.')
 
+    # export
     elif args.command == 'export':
         p = Project.from_directory(args.project_dir)
 
@@ -101,6 +103,7 @@ def main():
 
         print('Successfully exported model.')
 
+    # detect
     elif args.command == 'detect':
         # argparse outputs this as list of lists, so we have to convert it to a list
         if not args.output_types:
@@ -125,6 +128,7 @@ def main():
         print('Successfully ran detection.')
         print(f'Detection data written to {args.out_dir}')
 
+    # status
     elif args.command == 'status':
         p = Project.from_directory(args.project_dir)
         msg = f'Status for project "{p.config.project_dir}":\n'
@@ -135,6 +139,18 @@ def main():
         msg += f'\tmodel exported:\t\t\t\t{p.is_model_exported()}\n'
         if p.is_model_exported():
             msg += '\nProject is ready for detection.'
+        print(msg)
+
+    # list_models
+    elif args.command == 'list_models':
+        from ginjinn.core.tf_model import AVAILABLE_MODELS, AVAILABLE_MODELS_DOWNLOADABLE
+        
+        if args.downloadable:
+            msg = 'Available models with downloadable checkpoint:\n'
+            msg += '\n'.join([f'\t- {name}' for name in AVAILABLE_MODELS_DOWNLOADABLE])
+        else:
+            msg = 'Available models:\n'
+            msg += '\n'.join([f'\t- {name}' for name in AVAILABLE_MODELS])
         print(msg)
 
 if __name__ == '__main__':

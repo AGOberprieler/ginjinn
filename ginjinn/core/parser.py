@@ -279,3 +279,38 @@ status_parser.add_argument(
     type=str,
     help='Path to existing project directory.',
 )
+
+# list_models
+list_models_parser = command_parsers.add_parser(
+    'list_models',
+    help='''
+        Print available models.
+    ''',
+    description='''
+        Print available models.
+    ''',
+)
+list_models_parser.add_argument(
+    '-d', '--downloadable',
+    help='''
+        List only automatically downloadable models.
+    ''',
+    action='store_true',
+    default=False,
+)
+
+## utils
+# utils_parser = command_parsers.add_parser(
+#     'utils',
+#     help='''
+#         Additional utility scripts.
+#     ''',
+#     description='''
+#         Additional utility scripts.
+#     ''',
+# )
+# utils_subparsers = utils_parser.add_subparsers(
+#     dest='utils_command',
+#     # required=True
+# )
+# utils_subparsers.required = True
