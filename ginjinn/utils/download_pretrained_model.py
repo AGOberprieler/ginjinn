@@ -14,12 +14,18 @@ AVAILALE_PRETRAINED_MODELS = list(filter(lambda x: not x.endswith('.config'), PR
 
 
 # TODO: (low priority) rework this 
-def download_and_extract_pretrained_model(url, out_dir, block_size=1024, rm=False):
+def download_and_extract_pretrained_model(url, out_dir, block_size=1024, rm=False, force=False):
+    destination = path.abspath(path.join(out_dir, path.basename(url)))
+    ckpt_dir = destination[:-7]
+
+    if os.path.exists(ckpt_dir) and not force:
+        print('Checkpoint already available at "{}"... download not necessary.'.format(ckpt_dir))
+        return ckpt_dir
+
     r = requests.get(url, stream=True)
     total_size = int(r.headers.get('content-length', 0))
     wrote = 0
 
-    destination = path.abspath(path.join(out_dir, path.basename(url)))
     print('Downloading pretrained model from "{}"...'.format(url))
     with open(destination, 'wb') as f:
         for data in tqdm(r.iter_content(block_size), total=math.ceil(total_size//block_size) , unit='KB', unit_scale=True):
@@ -38,7 +44,6 @@ def download_and_extract_pretrained_model(url, out_dir, block_size=1024, rm=Fals
         os.remove(destination)
     print('Done')
 
-    ckpt_dir = destination[:-7]
     return ckpt_dir
 
 if __name__ == '__main__':

@@ -4,6 +4,8 @@ import json
 import importlib_resources as resources
 import subprocess
 import shutil
+import glob
+import re
 
 from pathlib import Path, PureWindowsPath
 
@@ -64,6 +66,12 @@ class PlatformNotSupportedError(Exception):
 class ModelNotReadyError(Exception):
     pass
 
+class UnknownCheckpointError(Exception):
+    pass
+
+class ModelNotTrainedError(Exception):
+    pass
+
 class TFModel:
     ''' TensorFlow model object
 
@@ -80,6 +88,7 @@ class TFModel:
             'runscript_cmd_path': str(model_path.joinpath('runscript.cmd').resolve()),
             'exportscript_sh_path': str(model_path.joinpath('exportscript.sh').resolve()),
             'exportscript_cmd_path': str(model_path.joinpath('exportscript.cmd').resolve()),
+            'export_dir': str(model_path.joinpath('exported').resolve()),
             'model_template': None,
             'record_train_path': None,
             'record_eval_path': None,
@@ -212,10 +221,6 @@ class TFModel:
         with Path(self.config.model_config_path).open('w') as f:
             f.write(model_config)
 
-        # create runscripts
-        self._construct_runscript_sh()
-        self._construct_runscript_cmd()
-
         # update configuration
         self.config.model_template = model_template
         self.config.record_train_path = str(Path(record_train_path).resolve())
@@ -225,6 +230,10 @@ class TFModel:
         self.config.checkpoint_path = str(Path(checkpoint_path)) # no resolve, since path can be ''
         self.config.n_iter = int(n_iter)
         self.config.batch_size = int(batch_size)
+        
+        # create runscripts
+        self._construct_runscript_sh()
+        self._construct_runscript_cmd()
 
         # write config to file
         self.to_json()
@@ -252,6 +261,61 @@ class TFModel:
         except KeyboardInterrupt:
             p.terminate()
             p.wait()
+
+    def export(self, checkpoint=None, force=False):
+        '''
+            Export the model at checkpoint
+
+            checkpoint can be the name of a checkpoint or the absolute paths to
+            a checkpoint of this model object
+        '''
+        ckpt_paths = self.checkpoints(name_only=False)
+        ckpt_names = self.checkpoints(name_only=True)
+
+        if len(ckpt_names) < 1:
+            raise ModelNotTrainedError('No model checkpoint available for export. run TFModel.train_and_eval first')
+        
+        # user-specified checkpoint
+        if checkpoint:
+            # unknown checkpoint
+            if checkpoint in ckpt_names:
+                idx = ckpt_names.index(checkpoint)
+                checkpoint = ckpt_paths[idx]
+            if not checkpoint in ckpt_paths:
+                msg = 'Unknown checkpoint name or path.'
+                raise UnknownCheckpointError(msg)
+        # no checkpoint specified, use most recent one
+        else:
+            checkpoint = ckpt_paths[-1]
+
+        self._construct_exportscript_sh(checkpoint)
+        self._construct_exportscript_cmd(checkpoint)
+
+        if config.PLATFORM == 'Windows':
+            exportscript_path = self.config.exportscript_cmd_path
+        elif config.PLATFORM == 'Linux':
+            exportscript_path = self.config.exportscript_sh_path
+        else:
+            msg = f'Platform {platform} is not supported!'
+            raise PlatformNotSupportedError(msg)
+
+        subprocess.Popen(
+            exportscript_path,
+            cwd=config.RESEARCH_PATH,
+        ).wait()
+
+    def checkpoints(self, name_only=True):
+        ''' Get checkpoint names (prefixes) sorted chronologically'''
+        # look for files with prefix model.ckpt and suffix '.index' in model_dir
+        # and remove the suffix to get the checkpoint paths
+        ckpt_paths = sorted(
+            [str(Path(f[:-len('.index')]).resolve()) for f in  glob.glob('../project/model/model.ckpt-*.index')],
+            key=_natural_keys
+        )
+
+        if name_only:
+            return [Path(f).name for f in ckpt_paths]
+        return ckpt_paths
 
     def to_json(self, fpath=None):
         '''
@@ -286,7 +350,36 @@ class TFModel:
         '''
             Remove model_dir
         '''
-        shutil.rmtree(self.config.model_dir)
+        if Path(self.config.model_dir).exists():
+            shutil.rmtree(self.config.model_dir)
+    
+    def cleanup_export(self):
+        '''
+            Remove export_dir
+        '''
+        if Path(self.config.export_dir).exists():
+            shutil.rmtree(self.config.export_dir)
+    
+    def cleanup_train_eval(self):
+        '''
+            Remove files and folder constructed by TFModel.train_and_eval()
+        '''
+        ckpt_paths = self.checkpoints(name_only=False)
+        for f in ckpt_paths:
+            Path(f).unlink()
+        
+        events_file = glob.glob(f'{self.config.model_dir}/events.out.tfevents.*')
+        if events_file:
+            Path(events_file).unlink
+        
+        eval_0_path = Path(self.config.model_dir).joinpath('eval_0')
+        if eval_0_path.exists():
+            shutil.rmtree(str(eval_0_path))
+
+        checkpoint_path = Path(self.config.model_dir).joinpath('checkpoint')
+        if checkpoint_path.exists():
+            checkpoint_path.unlink()
+
 
     @classmethod
     def from_directory(cls, model_dir):
@@ -342,12 +435,15 @@ class TFModel:
 
     def _construct_exportscript_sh(self, checkpoint_name, input_type='image_tensor', fpath=None):
         fpath = fpath or self.config.exportscript_sh_path
+        ckpt_prefix_path = str(Path(self.config.model_dir).joinpath(checkpoint_name).resolve().as_posix())
+
         template = resources.read_text(tf_script_templates, 'exportscript.sh')
         template = template.replace('<TF_RESEARCH_PATH>', str(Path(config.RESEARCH_PATH).as_posix()))
         template = template.replace('<TF_SLIM_PATH>', str(Path(config.SLIM_PATH).as_posix()))
         template = template.replace('<MODEL_DIR>', str(Path(self.config.model_dir).as_posix()))
-        # TODO: MODEL_CHECKPOINT_PREFIX
-        # TODO: EXPORT_DIR
+        template = template.replace('<MODEL_CONFIG_PATH>', str(Path(self.config.model_config_path).as_posix()))
+        template = template.replace('<MODEL_CHECKPOINT_PREFIX>', ckpt_prefix_path)
+        template = template.replace('<EXPORT_DIR>', str(Path(self.config.export_dir).as_posix()))
         template = template.replace('<INPUT_TYPE>', input_type)
 
         with Path(fpath).open('w') as f:
@@ -359,12 +455,15 @@ class TFModel:
         
     def _construct_exportscript_cmd(self, checkpoint_name, input_type='image_tensor', fpath=None):
         fpath = fpath or self.config.exportscript_cmd_path
+        ckpt_prefix_path = str(PureWindowsPath(self.config.model_dir).joinpath(checkpoint_name))
+
         template = resources.read_text(tf_script_templates, 'exportscript.cmd')
         template = template.replace('<TF_RESEARCH_PATH>', str(PureWindowsPath(config.RESEARCH_PATH)))
         template = template.replace('<TF_SLIM_PATH>', str(PureWindowsPath(config.SLIM_PATH)))
         template = template.replace('<MODEL_DIR>', str(PureWindowsPath(self.config.model_dir)))
-        # TODO: MODEL_CHECKPOINT_PREFIX
-        # TODO: EXPORT_DIR
+        template = template.replace('<MODEL_CONFIG_PATH>', str(PureWindowsPath(self.config.model_config_path)))
+        template = template.replace('<MODEL_CHECKPOINT_PREFIX>', ckpt_prefix_path)
+        template = template.replace('<EXPORT_DIR>', str(PureWindowsPath(self.config.export_dir)))
         template = template.replace('<INPUT_TYPE>', input_type)
 
         with Path(fpath).open('w') as f:
@@ -380,3 +479,10 @@ def _get_classdict_from_labelmap(file_path):
 
 def _get_n_classes_from_labelmap(file_path):
     return len(_get_classdict_from_labelmap(file_path))
+
+# source: https://stackoverflow.com/a/5967539
+def _atoi(text):
+    return int(text) if text.isdigit() else text
+
+def _natural_keys(text):
+    return [ _atoi(c) for c in re.split(r'(\d+)', text) ]

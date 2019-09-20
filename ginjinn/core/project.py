@@ -9,7 +9,7 @@ from ginjinn import data_files
 from ginjinn import config
 from ginjinn.core import Configuration
 from ginjinn.core.tf_dataset import TFDataset, DatasetNotReadyError
-from ginjinn.core.tf_model import TFModel, ModelNotReadyError
+from ginjinn.core.tf_model import TFModel, ModelNotReadyError, ModelNotTrainedError
 
 ''' Default configuration for ginjinn Project object. '''
 DEFAULTS = Configuration({
@@ -269,6 +269,25 @@ class Project:
 
         model = self._load_model()
         model.train_and_eval()
+    
+    def model_checkpoints(self, name_only=True):
+        '''
+            Get list of model checkpoints available for export
+        '''
+        model = self._load_model()
+        return model.checkpoints(name_only=name_only)
+
+    def export_model(self, checkpoint=None, force=False):
+        '''
+            Export model checkpoint for inference or
+            as checkpoint for training of another model
+        '''
+        model = self._load_model()
+        ckpt_names = model.checkpoints()
+        if len(ckpt_names) < 1:
+            raise ModelNotTrainedError('No model checkpoints available for export. Run Project.train_and_eval first.')
+
+        model.export(checkpoint=checkpoint, force=force)
     # ==
 
     @classmethod
