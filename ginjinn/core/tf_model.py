@@ -241,11 +241,14 @@ class TFModel:
         # write config to file
         self.to_json()
     
-    def train_and_eval(self):
+    def train_and_eval(self, force=False):
         # TODO: low priority: make output nicer
         if not self.is_ready():
             raise ModelNotReadyError('Model is not ready. Run TFModel.construct_model first')
         
+        if self.checkpoints() and not force:
+            raise Exception('Model was already trained')
+
         if config.PLATFORM == 'Windows':
             runscript_path = self.config.runscript_cmd_path
         elif config.PLATFORM == 'Linux':
@@ -264,6 +267,9 @@ class TFModel:
         except KeyboardInterrupt:
             p.terminate()
             p.wait()
+
+    def continue_training(self):
+        self.train_and_eval(force=True)
 
     def export(self, checkpoint=None, force=False):
         '''
@@ -291,6 +297,9 @@ class TFModel:
         else:
             checkpoint = ckpt_paths[-1]
 
+        if Path(self.config.export_dir).exists() and not force:
+            raise Exception('Model was already exported.')
+
         self._construct_exportscript_sh(checkpoint)
         self._construct_exportscript_cmd(checkpoint)
 
@@ -312,7 +321,7 @@ class TFModel:
         # look for files with prefix model.ckpt and suffix '.index' in model_dir
         # and remove the suffix to get the checkpoint paths
         ckpt_paths = sorted(
-            [str(Path(f[:-len('.index')]).resolve()) for f in  glob.glob('../project/model/model.ckpt-*.index')],
+            [str(Path(f[:-len('.index')]).resolve()) for f in glob.glob(f'{self.config.model_dir}/model.ckpt-*.index')],
             key=_natural_keys
         )
 
@@ -383,11 +392,12 @@ class TFModel:
         '''
         ckpt_paths = self.checkpoints(name_only=False)
         for f in ckpt_paths:
-            Path(f).unlink()
+            for fpath in glob.glob(f'{f}*'):
+                Path(fpath).unlink()
         
         events_file = glob.glob(f'{self.config.model_dir}/events.out.tfevents.*')
-        if events_file:
-            Path(events_file).unlink
+        for f in events_file:
+            Path(f).unlink
         
         eval_0_path = Path(self.config.model_dir).joinpath('eval_0')
         if eval_0_path.exists():
@@ -405,6 +415,30 @@ class TFModel:
         if graph_path.exists():
             graph_path.unlink()
 
+    
+    @property
+    def n_iter(self):
+        return self.config.n_iter
+    
+    @n_iter.setter
+    def n_iter(self, n_iter):
+        self.config.n_iter = n_iter
+        if self.is_ready():
+            self._construct_runscript_cmd()
+            self._construct_runscript_sh()
+            self.to_json()
+
+    @property
+    def batch_size(self):
+        return self.config.batch_size
+    
+    @batch_size.setter
+    def batch_size(self, batch_size):
+        self.config.batch_size = batch_size
+        if self.is_ready():
+            self._construct_runscript_cmd()
+            self._construct_runscript_sh()
+            self.to_json()
 
     @classmethod
     def from_directory(cls, model_dir):

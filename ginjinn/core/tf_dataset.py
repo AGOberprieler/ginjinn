@@ -58,16 +58,16 @@ class TFDataset:
         self.config.image_dir = str(Path(image_dir).resolve())
         self.config.test_fraction = test_fraction
 
-        print(self.config.annotations_path)
-        print(self.config.image_dir)
+        # print(self.config.annotations_path)
+        # print(self.config.image_dir)
         
 
         # check if input files exist
         if not Path(self.config.annotations_path).exists():
-            msg = f'Cannot find annotations path "{self.config.annotations_path}".'
+            msg = f'Cannot find annotations path "{self.config.annotations_path}". Check configuration.'
             raise Exception(msg)
         if not Path(self.config.image_dir).exists():
-            msg = f'Cannot find image directory "{self.config.image_dir}".'
+            msg = f'Cannot find image directory "{self.config.image_dir}". Check configuration.'
             raise Exception(msg)
 
         # create dataset directory if it does not exist
@@ -251,6 +251,21 @@ class TFDataset:
             self.config.record_eval_path,
             self.config.dataset_json,
         ]
+    
+    def print_summary(self):
+        summary = self.get_summary()
+        msg = '\n'.join([
+            'Dataset summary:',
+            f'\t- directory: {self.config.dataset_dir}',
+            f'\t- #images: {summary["n_images"]}',
+            f'\t- #objects: {summary["n_objects"]}',
+            f'\t- #classes: {summary["n_classes"]}',
+            f'\t- classes: {summary["classes"]}',
+            f'\t- #objects/class: {summary["n_samples_per_class"]}',
+        ])
+        print(msg)
+        
+
 
 
 def _get_classdict_from_labelmap(file_path):

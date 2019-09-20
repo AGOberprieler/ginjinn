@@ -112,11 +112,13 @@ class TFDetector(object):
             idcs = [i for i, score in enumerate(scores) if score >= th]
 
             cur_dir = join(out_dir, bname)
-            os.mkdir(cur_dir)
+            if not exists(cur_dir):
+                os.mkdir(cur_dir)
 
             if 'ibb' in output_types:
                 img_dir = join(cur_dir, 'ibb')
-                os.mkdir(img_dir)
+                if not exists(img_dir):
+                    os.mkdir(img_dir)
                 for c, c_n in cls_map.items():
                     new_img = image.copy()
                     _boxes = [box for i, box in enumerate(boxes) if (i in idcs) and (classes[i] == c)]
@@ -129,7 +131,8 @@ class TFDetector(object):
             
             if 'ebb' in output_types:
                 bb_dir = join(cur_dir, 'ebb')
-                os.mkdir(bb_dir)
+                if not exists(bb_dir):
+                    os.mkdir(bb_dir)
                 for i, box in enumerate(boxes):
                     if not (i in idcs):
                         continue
@@ -141,7 +144,8 @@ class TFDetector(object):
             
             if 'csv' in output_types:
                 filtered_boxes = [box for i, box in enumerate(boxes) if i in idcs]
-                boxes_to_csv(filtered_boxes, image, join(cur_dir, 'boxes.csv'))
+                filtered_scores = [score for i, score in enumerate(scores) if i in idcs]
+                boxes_to_csv(filtered_boxes, image, join(cur_dir, 'boxes.csv'), scores=filtered_scores)
 
     def get_classmap(self, classes):
         return {
@@ -149,7 +153,7 @@ class TFDetector(object):
         }
 
 
-def boxes_to_csv(boxes, image, out_path):
+def boxes_to_csv(boxes, image, out_path, scores=None):
     boxes = [(*_rel_box_to_img_coords(box, image), *box) for box in boxes]
     df = pd.DataFrame(
         boxes,
@@ -157,6 +161,8 @@ def boxes_to_csv(boxes, image, out_path):
             'ymin', 'xmin', 'ymax', 'xmax', 'ymin_rel', 'xmin_rel', 'ymax_rel', 'xmax_rel',
         ]
     )
+    if scores:
+        df['score'] = scores
     df.to_csv(out_path, index=False)
 
 def _rel_box_to_img_coords(box, image):
