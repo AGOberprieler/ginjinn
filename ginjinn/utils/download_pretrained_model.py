@@ -13,7 +13,7 @@ from ginjinn.core.tf_model import PRETRAINED_MODEL_URLS
 AVAILALE_PRETRAINED_MODELS = list(filter(lambda x: not x.endswith('.config'), PRETRAINED_MODEL_URLS.keys()))
 
 
-# TODO: (low priority) rework this 
+# TODO: (low priority) rework this to match new style
 def download_and_extract_pretrained_model(url, out_dir, block_size=1024, rm=False, force=False):
     destination = path.abspath(path.join(out_dir, path.basename(url)))
     ckpt_dir = destination[:-7]
@@ -46,7 +46,7 @@ def download_and_extract_pretrained_model(url, out_dir, block_size=1024, rm=Fals
 
     return ckpt_dir
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(
         description='Download pretrained model',
         formatter_class=argparse.RawDescriptionHelpFormatter
@@ -81,3 +81,6 @@ if __name__ == '__main__':
         pretrained_model_url,
         args.out_dir
     )
+
+if __name__ == '__main__':
+    main()

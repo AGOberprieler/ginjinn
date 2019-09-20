@@ -221,6 +221,13 @@ class Project:
         dataset = self._load_dataset()
         if dataset:
             dataset.cleanup_dataset_dir()
+    
+    def dataset_summary(self):
+        self._assert_project_is_ready()
+        self._assert_dataset_is_ready()
+        
+        dataset = self._load_dataset()
+        return dataset.get_summary()
     # ==
 
     # ==
@@ -401,16 +408,3 @@ class Project:
             self.config.config_path,
             self.config.project_json,
         ]
-
-    # @staticmethod
-    # def create_config_template(fpath):
-    #     '''
-    #     Create a configuration template file at fpath.
-
-    #     Keyword arguments:
-    #     fpath -- path to new config file
-    #     '''
-    #     template = resources.read_text(data_files, 'config_template.yaml')
-    #     with open(fpath, 'w') as f:
-    #         f.write(template)
-
