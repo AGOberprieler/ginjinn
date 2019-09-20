@@ -151,7 +151,9 @@ def main():
         else:
             msg = 'Available models:\n'
             msg += '\n'.join([f'\t- {name}' for name in AVAILABLE_MODELS])
+            msg += '\n\nList models with downloadable pretrained checkpoint only via "ginjinn list_models -d"'
         print(msg)
+
 
 if __name__ == '__main__':
     main()
