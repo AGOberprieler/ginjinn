@@ -9,7 +9,7 @@ from ginjinn import data_files
 from ginjinn import config
 from ginjinn.core import Configuration
 from ginjinn.core.tf_dataset import TFDataset, DatasetNotReadyError
-from ginjinn.core.tf_model import TFModel, ModelNotReadyError, ModelNotTrainedError
+from ginjinn.core.tf_model import TFModel, ModelNotReadyError, ModelNotTrainedError, ModelNotExportedError
 
 ''' Default configuration for ginjinn Project object. '''
 DEFAULTS = Configuration({
@@ -247,12 +247,22 @@ class Project:
         )
 
     def is_ready_model(self):
-        # check if project is set up
+        # check if model is setup
         self._assert_project_is_ready()
 
         model = self._load_model()
         if model:
             return model.is_ready()
+        return False
+    
+    def is_model_exported(self):
+        # check if model is exported
+        self._assert_project_is_ready()
+        self._assert_model_is_ready()
+
+        model = self._load_model()
+        if model:
+            return model.is_exported()
         return False
     
     def cleanup_model_dir(self):
@@ -290,6 +300,50 @@ class Project:
         model.export(checkpoint=checkpoint, force=force)
     # ==
 
+    # ==
+    # Inference
+    # ==
+    def detect(self, out_dir, image_path, output_types, padding=0, th=0.5):
+        ''' Run detection and save outputs to files
+
+            Parameters
+            ----------
+            out_dir : string
+                path to output directory
+            image_path: string
+                path to single image or directory containing images
+            output_type: list
+                list of output types ['ibb', 'ebb', 'csv']
+            padding: int
+                padding to apply to bounding boxes in pixel
+            th: float
+                score threshold to still consider a box. Boxes with scores
+        '''
+        
+        self._assert_model_is_exported()
+        self._assert_dataset_is_ready()
+
+        dataset = self._load_dataset()
+
+        model = self._load_model()
+        exported_model_path = model.get_exported_model_path()
+
+        import ginjinn.core.tf_detector
+        detector = ginjinn.core.tf_detector.TFDetector(
+            exported_model_path,
+            dataset.labelmap_path,
+        )
+
+        detector.run_detection(
+            out_dir,
+            image_path,
+            output_types,
+            padding=padding,
+            th=th,
+        )
+
+    # ==
+
     @classmethod
     def from_directory(cls, project_dir):
         ''' Load Project object from directory. '''
@@ -321,6 +375,12 @@ class Project:
         if not self.is_ready_model():
             raise ModelNotReadyError(
                 'Model is not set up. Run Project.setup_model first.'
+            )
+    
+    def _assert_model_is_exported(self):
+        if not self.is_model_exported():
+            raise ModelNotExportedError(
+                'No exported model available. Run Project.export_model first.'
             )
     
     def _load_dataset(self):

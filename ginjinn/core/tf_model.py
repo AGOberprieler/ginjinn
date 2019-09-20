@@ -72,6 +72,9 @@ class UnknownCheckpointError(Exception):
 class ModelNotTrainedError(Exception):
     pass
 
+class ModelNotExportedError(Exception):
+    pass
+
 class TFModel:
     ''' TensorFlow model object
 
@@ -298,7 +301,7 @@ class TFModel:
         else:
             msg = f'Platform {platform} is not supported!'
             raise PlatformNotSupportedError(msg)
-
+        
         subprocess.Popen(
             exportscript_path,
             cwd=config.RESEARCH_PATH,
@@ -346,6 +349,20 @@ class TFModel:
             Path(self.config.runscript_sh_path).exists(),
         ])
 
+    def is_exported(self):
+        ''' 
+            Returns whether there is an exported model available
+        '''
+        export_path = Path(self.config.export_dir)
+        if export_path.exists():
+            return export_path.joinpath('frozen_inference_graph.pb').exists()
+        return False
+
+    def get_exported_model_path(self):
+        if not self.is_exported:
+            raise ModelNotExportedError('No exported model available. Run TFModel.export() first.')
+        return str(Path(self.config.export_dir).joinpath('frozen_inference_graph.pb').resolve())
+
     def cleanup_model_dir(self):
         '''
             Remove model_dir
@@ -376,9 +393,17 @@ class TFModel:
         if eval_0_path.exists():
             shutil.rmtree(str(eval_0_path))
 
+        export_path = Path(self.config.model_dir).joinpath('export')
+        if export_path.exists():
+            shutil.rmtree(str(export_path))
+
         checkpoint_path = Path(self.config.model_dir).joinpath('checkpoint')
         if checkpoint_path.exists():
             checkpoint_path.unlink()
+        
+        graph_path = Path(self.config.model_dir).joinpath('graph.pbtxt')
+        if graph_path.exists():
+            graph_path.unlink()
 
 
     @classmethod

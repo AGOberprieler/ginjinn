@@ -55,7 +55,9 @@ if __name__ == '__main__':
         'config_name',
         metavar='config_name',
         type=str,
-        help='Name of the pipeline config file.'
+        help='Name of the pipeline config file.\nPretrained models are available for following configs:\n{}'.format(
+            '\n'.join('\t"{}"'.format(c) for c in AVAILALE_PRETRAINED_MODELS),
+        )
     )
     parser.add_argument(
         '-d', '--out_dir',
