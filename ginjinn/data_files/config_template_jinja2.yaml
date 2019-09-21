@@ -17,7 +17,7 @@ test_fraction: {{ config.test_fraction }}
 # == Model configuration ==
 # name of the object detection model
 # (or path to a tensorflow pipeline.config file)
-model_name: {{ config.model }}
+model: {{ config.model }}
 
 # whether a pretrained model checkpoint should be used
 use_checkpoint: true

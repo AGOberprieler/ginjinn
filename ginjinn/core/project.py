@@ -137,6 +137,7 @@ class Project:
             msg = 'Could not parse augmentation options. Check your config.yaml'
             raise MalformedConfigurationError(msg)
         
+        print(_config)
         self.config.update(_config)
 
     def to_json(self, fpath=None):
@@ -451,6 +452,8 @@ class Project:
             model = project._load_model()
             model.n_iter = project.config.n_iter
             model.batch_size = project.config.batch_size
+
+        print(project.config)
 
         return project
 
