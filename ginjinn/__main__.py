@@ -136,8 +136,12 @@ def main():
         msg += f'\tdataset setup:\t\t\t\t{p.is_ready_dataset()}\n'
         msg += f'\tmodel setup:\t\t\t\t{p.is_ready_model()}\n'
         msg += f'\tmodel (at least partially) trained:\t{bool(p.model_checkpoints())}\n'
-        msg += f'\tmodel exported:\t\t\t\t{p.is_model_exported()}\n'
-        if p.is_model_exported():
+        try:
+            is_exported = p.is_model_exported()
+        except:
+            is_exported = False
+        msg += f'\tmodel exported:\t\t\t\t{is_exported}\n'
+        if is_exported:
             msg += '\nProject is ready for detection.'
         print(msg)
 

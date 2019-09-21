@@ -115,6 +115,7 @@ class TFModel:
         augmentation_options,
         n_iter,
         batch_size,
+        augmentation,
     ):
         ''' Build model directory
 
@@ -142,9 +143,16 @@ class TFModel:
                 number of training steps
             batch_size: int
                 number of images to evaluate at once
+            augmentation: dict of dicts
+                dictionary of augmentation options as keys and augmentation configs
+                as keys
         '''
 
         from ginjinn.core.tf_model_configuration import TFModelConfigurationBuilder
+        from ginjinn.core.tf_augmentation import TFAugmentation
+
+        # check if augmentation is valid
+        aug = TFAugmentation(augmentation)
 
         # check if input files exist
         # the check for checkpoint_path must be made later, since it might might a
@@ -220,6 +228,7 @@ class TFModel:
         tfmc_builder.labelmap_path = str(Path(labelmap_path).resolve())
         tfmc_builder.checkpoint_path = str(Path(checkpoint_path)) # no resolve, since path can be ''
         tfmc_builder.use_checkpoint = bool(use_checkpoint)
+        tfmc_builder.augmentation = augmentation
         # tfmc_builder.augmentation = augmentation_options # TODO: implement
         model_config = tfmc_builder.build_config_str()
         with Path(self.config.model_config_path).open('w') as f:

@@ -7,6 +7,7 @@ from object_detection.protos import pipeline_pb2
 from google.protobuf import text_format
 
 from ginjinn.core import Configuration
+from ginjinn.core.tf_augmentation import TFAugmentation
 
 class RequiredConfigMissingError(Exception):
     pass
@@ -118,8 +119,18 @@ class TFModelConfigurationBuilder:
     
     @augmentation.setter
     def augmentation(self, augmentation_options):
-        #TODO: implement
-        pass
+        tf_aug = TFAugmentation(augmentation_options)
+        aug_options = self.pipeline_config.get('train_config').data_augmentation_options
+
+        # remove previous options
+        while len(aug_options):
+	        aug_options.pop()
+
+        # add new options
+        for pp in tf_aug.pps:
+	        aug_options.append(pp)
+
+        self.config.augmentation = augmentation_options
 
     def build_config_str(self):
         if self.config.nclasses is None:

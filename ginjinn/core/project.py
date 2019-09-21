@@ -11,6 +11,7 @@ from ginjinn import config
 from ginjinn.core import Configuration
 from ginjinn.core.tf_dataset import TFDataset, DatasetNotReadyError
 from ginjinn.core.tf_model import TFModel, ModelNotReadyError, ModelNotTrainedError, ModelNotExportedError
+from ginjinn.core.tf_augmentation import TFAugmentation
 
 ''' Default configuration for ginjinn Project object. '''
 DEFAULTS = Configuration({
@@ -96,7 +97,6 @@ class Project:
                 },
                 'change_brightness': {
                     'active': DEFAULTS.augmentation.change_brightness.active,
-                    'min_delta': DEFAULTS.augmentation.change_brightness.min_delta,
                     'max_delta': DEFAULTS.augmentation.change_brightness.max_delta,
                 },
                 'change_contrast': {
@@ -130,6 +130,12 @@ class Project:
             except yaml.YAMLError as e:
                 msg = 'Could not parse config.yaml:\n{e}'
                 raise MalformedConfigurationError(msg)
+
+        try:
+            TFAugmentation(_config['augmentation'])
+        except:
+            msg = 'Could not parse augmentation options. Check your config.yaml'
+            raise MalformedConfigurationError(msg)
         
         self.config.update(_config)
 
@@ -266,6 +272,7 @@ class Project:
             self.config.augmentation,
             self.config.n_iter,
             self.config.batch_size,
+            self.config.augmentation,
         )
 
     def is_ready_model(self):
@@ -311,6 +318,12 @@ class Project:
         self.cleanup_model_export()
         self.cleanup_model_training()
         self.cleanup_model_dir()
+        model_path = Path(self.config.model_dir)
+        if model_path.exists():
+            try:
+                model_path.rmdir()
+            except:
+                pass
 
     def train_and_eval(self):
         self._assert_project_is_ready()
@@ -333,7 +346,10 @@ class Project:
             Get list of model checkpoints available for export
         '''
         model = self._load_model()
-        return model.checkpoints(name_only=name_only)
+        if model:
+            return model.checkpoints(name_only=name_only)
+        else:
+            return []
 
     def export_model(self, checkpoint=None, force=False):
         '''
@@ -425,6 +441,9 @@ class Project:
         # load potentially manipulated user-facing config
         # and update project config accordingly
         project.load_config()
+
+        # save potentially updated config to json
+        project.to_json()
 
         # update model config in case config.yaml was edited
         # since setup_model was called
