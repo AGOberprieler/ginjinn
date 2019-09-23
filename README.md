@@ -128,3 +128,7 @@ After step five successfully completed, the project can be used for detection of
 This command runs object detection on all images in "image_dir" and writes the outputs to out_dir. The `-t` option describes the desired outputs, in this case: images with bounding boxes (`-t ibb`), extraced bounding boxes (`-t ebb`), and bounding box coordinates in a comman separated value file (`-t csv`).
 
 For all GinJinn commands, there is a "help" option available, which will list possible options and their meaning. This help will be shown when calling the command with the `-h` or `--help` parameter.
+
+
+## An example application: the *Leucanthemum* dataset
+### Not yet published
