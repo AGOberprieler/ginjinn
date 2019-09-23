@@ -46,6 +46,24 @@ def download_and_extract_pretrained_model(url, out_dir, block_size=1024, rm=Fals
 
     return ckpt_dir
 
+def download_pretrained_model(model, out_dir):
+    pretrained_model_url = PRETRAINED_MODEL_URLS.get(model, None)
+    if pretrained_model_url is None:
+        msg = 'ERROR: No pretrained model available for config "{}".\nPretrained models are available for following configs:\n{}'.format(
+            args.config_name,
+            '\n'.join('\t"{}"'.format(c) for c in AVAILALE_PRETRAINED_MODELS),
+        )
+        print(msg, file=sys.stderr)
+        sys.exit()
+
+    ckpt_dir = download_and_extract_pretrained_model(
+        pretrained_model_url,
+        out_dir
+    )
+
+    print(f'Successfully downloaded pretrained model. Location: "{ckpt_dir}"')
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='Download pretrained model',

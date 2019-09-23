@@ -157,6 +157,13 @@ def main():
             msg += '\n'.join([f'\t- {name}' for name in AVAILABLE_MODELS])
             msg += '\n\nList models with downloadable pretrained checkpoint only via "ginjinn list_models -d"'
         print(msg)
+    
+    # utils
+    elif args.command == 'utils':
+        # download_checkpoint
+        if args.utils_command == 'download_checkpoint':
+            from ginjinn.utils.download_pretrained_model import download_pretrained_model
+            download_pretrained_model(args.model_name, args.out_dir)
 
 
 if __name__ == '__main__':

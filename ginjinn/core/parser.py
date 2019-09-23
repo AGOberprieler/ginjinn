@@ -299,18 +299,45 @@ list_models_parser.add_argument(
     default=False,
 )
 
-## utils
-# utils_parser = command_parsers.add_parser(
-#     'utils',
-#     help='''
-#         Additional utility scripts.
-#     ''',
-#     description='''
-#         Additional utility scripts.
-#     ''',
-# )
-# utils_subparsers = utils_parser.add_subparsers(
-#     dest='utils_command',
-#     # required=True
-# )
-# utils_subparsers.required = True
+#== utils
+utils_parser = command_parsers.add_parser(
+    'utils',
+    help='''
+        Additional utility scripts.
+    ''',
+    description='''
+        Additional utility scripts.
+    ''',
+)
+utils_subparsers = utils_parser.add_subparsers(
+    dest='utils_command',
+    # required=True
+)
+utils_subparsers.required = True
+
+# download_checkpoint
+download_checkpoint_parser = utils_subparsers.add_parser(
+    'download_checkpoint',
+    help='''
+        Download pretrained model checkpoint.
+    ''',
+    description='''
+        Download pretrained model checkpoint.
+    ''',
+)
+
+download_checkpoint_parser.add_argument(
+    'model_name',
+    type=str,
+    help='''
+        Name of the model for which the checkpoint should be downloaded.
+        List available models with downloable checkpoints via "ginjinn list_models -d".
+    ''',
+)
+download_checkpoint_parser.add_argument(
+    'out_dir',
+    type=str,
+    help='''
+        Directory, which the pretrained model checkpoint will be downloaded to.
+    ''',
+)
