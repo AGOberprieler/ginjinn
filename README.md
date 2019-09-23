@@ -1,5 +1,5 @@
 # GinJinn
-GinJinn is an object detection pipeline for the extraction of structures from digital images of herbarium specimens based on the [TensorFlow object detection API](https://github.com/tensorflow/models/tree/master/research/object_detection). 
+GinJinn is an object detection command-line (Linux shell and Windows cmd) pipeline for the extraction of structures from digital images of herbarium specimens based on the [TensorFlow object detection API](https://github.com/tensorflow/models/tree/master/research/object_detection). 
 
 GinJinn simplifies the management of object detection projects by automaticcaly converting annotated images to tensorflow record format and setting up model pipeline configurations, and provides an easy interface to training and export functionality. Additionally, GinJinn provides a command to instantly use trained and exported models for the detection of objects in new data.
 
@@ -10,18 +10,25 @@ See [Usage](#usage) for an introduction on how to use GinJinn, or look at the [e
 ## Installation
 GinJinn supports the standard TensorFlow CPU version, as well as TensorFlow-GPU.
 Installation of the CPU version is easier, but the training and detection are (compared to the GPU version with a recent GPU) orders of magnitude slower. If possible, you should use the GPU version.
+
 Do NOT install GPU and CPU version in the same conda environment, otherwise you will get strange errors.
 
+All installation commands must be run from your systems command line. For Linux that is the shell/bash, and for windows that is cmd.
+
 ### CPU version
-1. Install conda:
-	- Windows:
-		1. Download miniconda Python 3.7 installer from: [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html)
-		2. Run installer. Select append to Path when asked.
-	- Linux:
+1. Install Conda. [Conda](https://docs.conda.io/en/latest/) is an open-source package management system for Python and R, which also includes an environment management system.
+	- Windows ([official guide](https://conda.io/projects/conda/en/latest/user-guide/install/windows.html)):
+		1. Download miniconda Python 3.7 GUI installer from: [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html)
+		2. Run the GUI installer via double click. Select append to Path when asked.
+	- Linux ([official guide](https://conda.io/projects/conda/en/latest/user-guide/install/linux.html)):
 		1. Download miniconda Python 3.7 via:
-			`wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh`
+			```bash
+			wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+			```
 		2. Install miniconda. Select append to .bashrc/Path if asked:
-			`bash Miniconda3-latest-Linux-x86_64.sh`
+			```bash
+			bash Miniconda3-latest-Linux-x86_64.sh
+			```
 2. Setup conda environment
 	```
 	conda create -n ginjinn-cpu python=3.6
@@ -46,18 +53,22 @@ On linux, pycocotools are automatically installed with ginjinn. On Windows, you 
 	```
 
 ### GPU version
-1. Install conda:
-	- Windows:
+1. Install Conda. [Conda](https://docs.conda.io/en/latest/) is an open-source package management system for Python and R, which also includes an environment management system.
+	- Windows ([official guide](https://conda.io/projects/conda/en/latest/user-guide/install/windows.html)):
 		1. Download miniconda Python 3.7 installer from: [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html)
 		2. Run installer. Select the append to Path option.
-	- Linux:
+	- Linux ([official guide](https://conda.io/projects/conda/en/latest/user-guide/install/linux.html)):
 		1. Download miniconda Python 3.7 via:
-			`wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh`
+			```bash
+			wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+			```
 		2. Install miniconda. Select append to .bashrc if asked:
-			`bash Miniconda3-latest-Linux-x86_64.sh`
+			```bash
+			bash Miniconda3-latest-Linux-x86_64.sh
+			```
 2. Install software requirements listed at [https://www.tensorflow.org/install/gpu](https://www.tensorflow.org/install/gpu) for tensorflow 1. This will include proprietary NVIDIA drivers and libraries and requires you to create an account at NVIDIA. Make sure your GPU is supported!
 
-3. Setup conda environment
+3. Setup conda environment.
 	```
 	conda create -n ginjinn-gpu python=3.6
 	```
@@ -83,6 +94,8 @@ On linux, pycocotools are automatically installed with ginjinn. On Windows, you 
 	```
 
 ## Usage
+Make sure to activate your conda environment via `conda activate MY_ENV_NAME` prior to running any ginjinn command.
+
 ### Setup, Training, and Export
 The GinJinn pipeline consists of five steps:
 1. Setup of the project directory:
