@@ -5,7 +5,7 @@ GinJinn simplifies the management of object detection projects by automaticcaly 
 
 See [Installation](#installation) for installation instructions on Windows and Linux. MAC is not supported.
 
-See [Usage](#usage) for an example application of GinJinn
+See [Usage](#usage) for an introduction on how to use GinJinn, or look at the [example application](#example-application) for a pratical introduction.
 
 ## Installation
 GinJinn supports the standard TensorFlow CPU version, as well as TensorFlow-GPU.
@@ -129,6 +129,5 @@ This command runs object detection on all images in "image_dir" and writes the o
 
 For all GinJinn commands, there is a "help" option available, which will list possible options and their meaning. This help will be shown when calling the command with the `-h` or `--help` parameter.
 
-
-## An example application: the *Leucanthemum* dataset
+## <a name="example-application">An example application: the *Leucanthemum* dataset</a>
 ### Not yet published
