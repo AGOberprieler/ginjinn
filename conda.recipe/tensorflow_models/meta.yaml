@@ -23,6 +23,7 @@ requirements:
     - numpy
     - git
     - pip
+    - protobuf 3.9.*
 
   run:
     - python 3.6.*
@@ -33,6 +34,7 @@ requirements:
     - numpy
     - git
     - pip
+    - protobuf 3.9.*
 
 # test:
 #   imports:

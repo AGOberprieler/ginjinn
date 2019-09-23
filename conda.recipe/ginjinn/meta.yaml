@@ -50,4 +50,4 @@ build:
 about:
   home: https://github.com/AGOberprieler/ginjinn
   license: MIT
-  summary: Object detection pipeline for the extraction of structures from herbarium specimens
+  summary: Object detection pipeline for the extraction of structures from digitized herbarium specimens
