@@ -53,7 +53,9 @@ On linux, pycocotools are automatically installed with ginjinn. On Windows, you 
 	```
 
 ### GPU version
-1. Install Conda. [Conda](https://docs.conda.io/en/latest/) is an open-source package management system for Python and R, which also includes an environment management system.
+1. Install software requirements listed at [https://www.tensorflow.org/install/gpu](https://www.tensorflow.org/install/gpu) for tensorflow 1. This will include proprietary NVIDIA drivers and libraries and requires you to create an account at NVIDIA. Make sure your GPU is supported!
+
+2. Install Conda. [Conda](https://docs.conda.io/en/latest/) is an open-source package management system for Python and R, which also includes an environment management system.
 	- Windows ([official guide](https://conda.io/projects/conda/en/latest/user-guide/install/windows.html)):
 		1. Download miniconda Python 3.7 installer from: [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html)
 		2. Run installer. Select the append to Path option.
@@ -66,7 +68,6 @@ On linux, pycocotools are automatically installed with ginjinn. On Windows, you 
 			```bash
 			bash Miniconda3-latest-Linux-x86_64.sh
 			```
-2. Install software requirements listed at [https://www.tensorflow.org/install/gpu](https://www.tensorflow.org/install/gpu) for tensorflow 1. This will include proprietary NVIDIA drivers and libraries and requires you to create an account at NVIDIA. Make sure your GPU is supported!
 
 3. Setup conda environment.
 	```
