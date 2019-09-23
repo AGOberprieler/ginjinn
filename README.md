@@ -27,7 +27,7 @@ Do NOT install GPU and CPU version in the same conda environment, otherwise you 
 	```
 3. Activate conda environment. You will have to run this command every time you want to use ginjinn after closing your terminal. The remaining installation assumes that this environment is activated.
 	```
-	conda activate ginjinn-gpu
+	conda activate ginjinn-cpu
 	```
 4. Install GinJinn
 	```
