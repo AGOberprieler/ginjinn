@@ -277,6 +277,7 @@ class TFModel:
         except KeyboardInterrupt:
             p.terminate()
             p.wait()
+            raise Exception('Model training interrupted.')
 
     def continue_training(self):
         self.train_and_eval(force=True)
