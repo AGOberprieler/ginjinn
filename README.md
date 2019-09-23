@@ -40,7 +40,7 @@ All installation commands must be run from your systems command line. For Linux 
 4. Install tensorflow
 Attention: never install CPU and GPU version in the same conda environment!
 	```
-	conda install -c anaconda tensorflow
+	conda install -c anaconda tensorflow=1.14.0
 	```
 5. Install GinJinn
 	```
@@ -80,12 +80,12 @@ On linux, pycocotools are automatically installed with ginjinn. On Windows, you 
 	```
 5. Install GinJinn
 	```
-	conda install ginjinn -c conda-forge -c AGOberprieler 
+	conda install ginjinn-gpu -c conda-forge -c AGOberprieler 
 	```
 6. Install tensorflow-gpu
 Attention: never install CPU and GPU version in the same conda environment!
 	```
-	pip install tensorflow-gpu
+	pip install tensorflow-gpu==1.14.0
 	```
 7.  (**Windows only**) Install pycocotools:
 On linux, pycocotools are automatically installed with ginjinn. On Windows, you will have to install them manually via pip. Make sure, you have the "Visual C++ 2015 build tools" ([download here](https://go.microsoft.com/fwlink/?LinkId=691126)) installed before executing the following command.
