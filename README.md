@@ -83,6 +83,7 @@ On linux, pycocotools are automatically installed with ginjinn. On Windows, you 
 	```
 
 ## Usage
+### Setup, Training, and Export
 The GinJinn pipeline consists of five steps:
 1. Setup of the project directory:
 
@@ -115,7 +116,12 @@ The GinJinn pipeline consists of five steps:
 	
 	Exports the latest model checkpoint for detection to "my_project/model/exported".
 
-After step five, the project can be used for detection of structures in images:
+If you don't want to make any changes to any of the intermediary files, you can also run GinJinn with the `auto` command, which will run steps two to five without user interaction:
+
+	`ginjinn auto my_project`
+
+### Detection
+After step five successfully completed, the project can be used for detection of structures in images:
 
 `ginjinn detect my_project image_dir out_dir -t ibb -t ebb -t csv`
 	
