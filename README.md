@@ -37,14 +37,14 @@ All installation commands must be run from your systems command line. For Linux 
 	```
 	conda activate ginjinn-cpu
 	```
-4. Install GinJinn
-	```
-	conda install ginjinn -c conda-forge -c AGOberprieler 
-	```
-5. Install tensorflow
+4. Install tensorflow
 Attention: never install CPU and GPU version in the same conda environment!
 	```
-	pip install tensorflow
+	conda install -c anaconda tensorflow
+	```
+5. Install GinJinn
+	```
+	conda install ginjinn -c conda-forge -c AGOberprieler 
 	```
 6. (Windows only) Install pycocotools:
 On linux, pycocotools are automatically installed with ginjinn. On Windows, you will have to install them manually via pip. Make sure, you have the "Visual C++ 2015 build tools" ([download here](https://go.microsoft.com/fwlink/?LinkId=691126)) installed before executing the following command.
@@ -87,7 +87,7 @@ Attention: never install CPU and GPU version in the same conda environment!
 	```
 	pip install tensorflow-gpu
 	```
-7.  (Windows only) Install pycocotools:
+7.  (**Windows only**) Install pycocotools:
 On linux, pycocotools are automatically installed with ginjinn. On Windows, you will have to install them manually via pip. Make sure, you have the "Visual C++ 2015 build tools" ([download here](https://go.microsoft.com/fwlink/?LinkId=691126)) installed before executing the following command.
 	```
 	pip install "git+https://github.com/philferriere/cocoapi.git#egg=pycocotools&subdirectory=PythonAPI"
