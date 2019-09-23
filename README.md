@@ -4,6 +4,7 @@ GinJinn is an object detection pipeline for the extraction of structures from di
 GinJinn simplifies the management of object detection projects by automaticcaly converting annotated images to tensorflow record format and setting up model pipeline configurations, and provides an easy interface to training and export functionality. Additionally, GinJinn provides a command to instantly use trained and exported models for the detection of objects in new data.
 
 See [Installation](#installation) for installation instructions on Windows and Linux. MAC is not supported.
+
 See [Usage](#usage) for an example application of GinJinn
 
 ## Installation
