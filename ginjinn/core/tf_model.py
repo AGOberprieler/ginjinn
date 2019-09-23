@@ -273,7 +273,7 @@ class TFModel:
         )
 
         try:
-            p.wait()
+            return p.wait()
         except KeyboardInterrupt:
             p.terminate()
             p.wait()
@@ -282,7 +282,7 @@ class TFModel:
             raise Exception('Model training interrupted.')
 
     def continue_training(self):
-        self.train_and_eval(force=True)
+        return self.train_and_eval(force=True)
 
     def export(self, checkpoint=None, force=False):
         '''
@@ -324,7 +324,7 @@ class TFModel:
             msg = f'Platform {platform} is not supported!'
             raise PlatformNotSupportedError(msg)
         
-        subprocess.Popen(
+        return subprocess.Popen(
             exportscript_path,
             cwd=config.RESEARCH_PATH,
         ).wait()

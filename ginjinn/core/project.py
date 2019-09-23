@@ -332,7 +332,7 @@ class Project:
         self._assert_model_is_ready()
 
         model = self._load_model()
-        model.train_and_eval()
+        return model.train_and_eval()
     
     def continue_training(self):
         self._assert_project_is_ready()
@@ -340,7 +340,7 @@ class Project:
         self._assert_model_is_ready()
 
         model = self._load_model()
-        model.continue_training()
+        return model.continue_training()
     
     def model_checkpoints(self, name_only=True):
         '''
@@ -362,7 +362,7 @@ class Project:
         if len(ckpt_names) < 1:
             raise ModelNotTrainedError('No model checkpoints available for export. Run Project.train_and_eval first.')
 
-        model.export(checkpoint=checkpoint, force=force)
+        return model.export(checkpoint=checkpoint, force=force)
     
     def get_n_iter(self):
         return self.config.n_iter

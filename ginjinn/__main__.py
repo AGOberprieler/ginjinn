@@ -40,9 +40,11 @@ def main():
         print('Successfully setup dataset ...')
         p.setup_model()
         print('Successfully setup model ...')
-        p.train_and_eval()
+        return_code = p.train_and_eval()
+        print('return_code', return_code)
         print('Successfully trained model ...')
-        p.export_model()
+        return_code = p.export_model()
+        print('return_code', return_code)
         print('Successfully exported model ...')
         print('Project ready for detection.')
 
@@ -72,13 +74,14 @@ def main():
             p.cleanup_model_training()
         
         if args.continue_training:
-            p.continue_training()
+            return_code = p.continue_training()
         else:
             try:
-                p.train_and_eval()
+                return_code = p.train_and_eval()
             except:
                 raise Exception('Model was already trained. Run command with -f/--force to overwrite previous training, or with -c/--continue_training to continue the previous training.')
-
+        return_code = p.train_and_eval()
+        print('return_code', return_code)
         print('Successfully trained model.')
 
     # export
