@@ -278,6 +278,8 @@ class TFModel:
             p.terminate()
             p.wait()
             raise Exception('Model training interrupted.')
+        except:
+            raise Exception('Model training interrupted.')
 
     def continue_training(self):
         self.train_and_eval(force=True)
