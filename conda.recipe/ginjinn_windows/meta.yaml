@@ -11,19 +11,12 @@ requirements:
     - python 3.6
     - setuptools
     - protobuf 3.8
-    - tensorflow_models
     - numpy 1.16
     - pandas
     - pip
     - cython
     - pillow
-    - matplotlib
     - importlib_resources
-    - jinja2
-    - scikit-learn
-    - tqdm
-    - pyyaml
-    - requests
 
   run:
     - python 3.6
