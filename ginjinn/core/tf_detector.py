@@ -59,11 +59,13 @@ class TFDetector(object):
         num_detections = graph.get_tensor_by_name('num_detections:0')
 
         (boxes, scores, classes, num_detections) = self.sess.run(
-                [boxes, scores, classes, num_detections],
-                feed_dict={image_tensor: image_np_expanded})
+            [boxes, scores, classes, num_detections],
+            feed_dict={image_tensor: image_np_expanded}
+        )
 
         boxes, scores, classes, num_detections = map(
-                np.squeeze, [boxes, scores, classes, num_detections])
+            np.squeeze, [boxes, scores, classes, num_detections]
+        )
 
         return boxes, scores, classes.astype(int), num_detections
 

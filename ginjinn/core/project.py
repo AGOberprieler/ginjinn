@@ -137,7 +137,15 @@ class Project:
             msg = 'Could not parse augmentation options. Check your config.yaml'
             raise MalformedConfigurationError(msg)
         
-        # print(_config)
+
+        # resolve paths to allow '~' in path on linux
+        _config['image_dir'] = str(Path(_config['image_dir']).resolve(strict=True))
+        _config['annotation_path'] = str(Path(_config['annotation_path']).resolve(strict=True))
+        if _config['checkpoint_path']:
+            _config['checkpoint_path'] = str(Path(_config['checkpoint_path']).resolve(strict=True))
+
+        print(_config)
+
         self.config.update(_config)
 
     def to_json(self, fpath=None):

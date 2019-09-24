@@ -1,7 +1,7 @@
 # ATTENTION: YAML is whitespace sensitive
 
 # == Data configuration ==
-# path to directory containing annotations (xml) or path of the VIA JSON annotations
+# ABSOLUTE path to directory containing annotations (xml) or path of the VIA JSON annotations
 # e.g. /home/me/data/annotations for linux, or C:\Users\me\Documents\annotations for windows
 annotation_path: {{ config.annotation_path }}
 # annotation type. ["PascalVOC", "VIA"]
