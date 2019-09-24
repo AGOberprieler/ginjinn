@@ -18,7 +18,6 @@ requirements:
 
   run:
     - python 3.6
-    - tensorflow 1.14 
     - protobuf 3.9.2
     - tensorflow_models
     - numpy
