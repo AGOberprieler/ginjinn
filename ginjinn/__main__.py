@@ -80,7 +80,7 @@ def main():
                 return_code = p.train_and_eval()
             except:
                 raise Exception('Model was already trained. Run command with -f/--force to overwrite previous training, or with -c/--continue_training to continue the previous training.')
-        return_code = p.train_and_eval()
+
         print('return_code', return_code)
         print('Successfully trained model.')
 
