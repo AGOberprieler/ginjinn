@@ -186,7 +186,7 @@ This command runs object detection on all images in "image_dir" and writes the o
 For all GinJinn commands, there is a "help" option available, which will list possible options and their meaning. This help will be shown when calling the command with the `-h` or `--help` parameter.
 
 ## <a name="example-application">An example application: the *Leucanthemum* dataset</a>
-We highly recommend to use GinJinn GPU for this analysis; the CPU version will most likely be prohibitively slow. If you still want to run this analysis you can use a computationally less demanding model (will be noted in the following steps), which will only take around one day to train, but will also deliver worse results.
+We highly recommend to use GinJinn GPU for this analysis; the CPU version will most likely be prohibitively slow. If you do not have a sufficient GPU and still want to run this analysis you can use a computationally less demanding model (it will be noted in the following steps which on), which will only take around 24h to train, but will also lead to worse results.
 
 ##### Hardware used for the analysis:
 - CPU: Intel Xeon CPU E5-2687W v3 @ 3.10GHz (10 cores)
