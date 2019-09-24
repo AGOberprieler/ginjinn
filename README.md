@@ -214,7 +214,7 @@ The dataset consists of 286 digitized herbarium specimens of either *L. vulgare*
 	Generates the folder 'leucanthemum_project' in your working directory. 
 
 3. Modify project configuration:
-	Open 'leucanthemum_project/project.yaml' in a text-editor of your choice and replace 'ENTER PATH HERE' at `annotation_path` and `image_dir` with the *absolute* paths to the previously unzipped dataset folders. 
+	Open 'leucanthemum_project/config.yaml' in a text-editor of your choice and replace 'ENTER PATH HERE' at `annotation_path` and `image_dir` with the *absolute* paths to the previously unzipped dataset folders. 
 	To reproduce the *Leucanthemum* analysis, you also need to replace the `model` default option with 'faster_rcnn_inception_resnet_v2_atrous_coco, and setthe number of iterations to run `n_iter` to the value 12000. If you are using the CPU version, keep the default model and number of iterations.
 
 4. Run the remaining pipeline steps:
