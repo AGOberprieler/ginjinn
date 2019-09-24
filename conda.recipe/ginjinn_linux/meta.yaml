@@ -15,6 +15,7 @@ requirements:
     - pip
     - cython 0.29.13
     - importlib_resources
+    - pillow
 
   run:
     - python 3.6
