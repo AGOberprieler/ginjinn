@@ -186,4 +186,48 @@ This command runs object detection on all images in "image_dir" and writes the o
 For all GinJinn commands, there is a "help" option available, which will list possible options and their meaning. This help will be shown when calling the command with the `-h` or `--help` parameter.
 
 ## <a name="example-application">An example application: the *Leucanthemum* dataset</a>
-### Not yet published
+We highly recommend to use GinJinn GPU for this analysis; the CPU version will most likely be prohibitively slow. If you still want to run this analysis you can use a computationally less demanding model (will be noted in the following steps), which will only take around one day to train, but will also deliver worse results.
+
+##### Hardware used for the analysis:
+- CPU: Intel Xeon CPU E5-2687W v3 @ 3.10GHz (10 cores)
+- GPU: NVIDIA Quadro M4000
+- Memory: 256 GB
+
+##### Recommened hardware:
+- CPU: faster is better
+- Memory: at least 32 GB
+- GPU: Any GPU with >= 8 GB memory
+
+##### The *Leucanthemum* dataset:
+The dataset consists of 286 digitized herbarium specimens of either *L. vulgare* or *L. ircutianum* in JPEG format and corresponding PASCAL VOC XML annotation. A single object class 'leaf', representing intact leaves (not overlapp or damage) was annotated. In total, there are 886 leaf annotations in 243 of the the images. In 43 of the images no intact leaves could be found. Annotations were produced with [labelImg](https://github.com/tzutalin/labelImg).
+
+
+##### Reproducing the analysis:
+1. Download the dataset from [here](https://data.bgbm.org/dataset/gfbio/0033/gfbio0033.zip) and unzip it. It contains two folders: 'images', containing the JPEG images, and 'annotations', containing the PASCAL VOC XML annotations.
+
+*Note*: The following commands assume that you have successfully installed ginjinn in a Conda environment, and require you to run the following commands in this environment in your terminal (shell, or cmd, depending on your OS)
+
+2. Create a new GinJinn project:
+	```
+	ginjinn new leucanthemum_project
+	```
+	Generates the folder 'leucanthemum_project' in your working directory. 
+
+3. Modify project configuration:
+	Open 'leucanthemum_project/project.yaml' in a text-editor of your choice and replace 'ENTER PATH HERE' at `annotation_path` and `image_dir` with the *absolute* paths to the previously unzipped dataset folders. 
+	To reproduce the *Leucanthemum* analysis, you also need to replace the `model` default option with 'faster_rcnn_inception_resnet_v2_atrous_coco, and setthe number of iterations to run `n_iter` to the value 12000. If you are using the CPU version, keep the default model and number of iterations.
+
+4. Run the remaining pipeline steps:
+		*ATTENTION: if you are not sure, whether your hardware is sufficient to handle model training, make sure to monitor the memory consumption of you system. TensorFlow will take as much memory as it needs, if that is more than your machine has available, your workstation will most likely freeze!*
+	```
+	ginjinn auto leucanthemum_project
+	```
+	This command will sequentially run dataset setup (`ginjinn setup_dataset`), model setup (`ginjinn setup_model`), model training (`ginjinn train`), and model export (`ginjinn export`).
+	
+	You can and should monitor progress of the model training via [TensorBoard](https://www.tensorflow.org/guide/summaries_and_tensorboard). Simply run `tensorboard --logdir leucanthemum_project` in a new shell in the same conda environment. This will host tiny webserver on your local machine that you visit in your browser at the link printed by TensorBoard. On default that is 'localhost:6006'.
+
+6. You can now use the GinJinn project for detection of leaves:
+	```
+	ginjinn detect leucanthemum_project PATH_TO_IMAGES OUT_DIR -t csv -t ibb -t evv
+	```
+	Here, PATH_TO_IMAGES is the path to a directory containing images (JPEG or PNG) - for this trial just select the *Leucanthemum* images folder - and OUT_DIR is the path of a directory that will be newly generated, where the outputs will be saved. The `-t` option tells GinJinn the kinds of outputs you want to get. `-t ibb` means images with bounding boxes, `-t ebb` means extracted bounding boxes, and `-t csv` means bounding boxes in CSV format. 
