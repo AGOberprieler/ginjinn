@@ -8,91 +8,135 @@ See [Installation](#installation) for installation instructions on Windows and L
 See [Usage](#usage) for an introduction on how to use GinJinn, or look at the [example application](#example-application) for a pratical introduction.
 
 ## Installation
-GinJinn supports the standard TensorFlow CPU version, as well as TensorFlow-GPU.
-Installation of the CPU version is easier, but the training and detection are (compared to the GPU version with a recent GPU) orders of magnitude slower. If possible, you should use the GPU version.
-
+Installation of the CPU version is easier, but the training and detection are (generally) also orders of magnitude slower. If possible, you should use the GPU version.
 Do NOT install GPU and CPU version in the same conda environment, otherwise you will get strange errors.
 
-All installation commands must be run from your systems command line. For Linux that is the shell/bash, and for windows that is cmd.
+Installation instructions are available for:
+ - [Linux](#linux): [CPU](#linux-cpu), [GPU](#linux-gpu)
+ - [Windows 10](#windows): [CPU](#windows-cpu), [GPU](#windows-gpu)
 
-### CPU version
-1. Install Conda. [Conda](https://docs.conda.io/en/latest/) is an open-source package management system for Python and R, which also includes an environment management system.
-	- Windows ([official guide](https://conda.io/projects/conda/en/latest/user-guide/install/windows.html)):
-		1. Download miniconda Python 3.7 GUI installer from: [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html)
-		2. Run the GUI installer via double click. Select append to Path when asked.
-	- Linux ([official guide](https://conda.io/projects/conda/en/latest/user-guide/install/linux.html)):
-		1. Download miniconda Python 3.7 via:
-			```bash
-			wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-			```
-		2. Install miniconda. Select append to .bashrc/Path if asked:
-			```bash
-			bash Miniconda3-latest-Linux-x86_64.sh
-			```
-2. Setup conda environment
-	```
-	conda create -n ginjinn-cpu python=3.6
-	```
-3. Activate conda environment. You will have to run this command every time you want to use ginjinn after closing your terminal. The remaining installation assumes that this environment is activated.
-	```
+### Linux
+Both versions of GinJinn require [Conda](https://docs.conda.io/en/latest/), an open-source package management system for Python and R, which also includes facilities for environment management system. See the [official installation guide](https://conda.io/projects/conda/en/latest/user-guide/install/linux.html) for further information.
+
+Run the following commands in your linux terminal to install Conda:
+```bash
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+```
+This will download the installer via `wget` and run the installation. When asked if you want to initialize conda for you terminal, answer with 'yes'. You will need to restart your terminal after the installation of Conda.
+
+#### Linux CPU
+Execute the following commands from your Linux shell.
+1. Create an [Conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html):
+	```bash
+	conda create -n ginjinn-cpu python=3.6 tensorflow=1.14.0
+	``` 
+	This command will setup a new Conda environment named 'ginjinn-cpu' with the packages Python 3.6 and TensorFlow 1.14.
+
+2. Activate the Conda environment:
+	```bash
 	conda activate ginjinn-cpu
 	```
-4. Install tensorflow
-Attention: never install CPU and GPU version in the same conda environment!
-	```
-	conda install -c anaconda tensorflow=1.14.0
-	```
-5. Install GinJinn
-	```
-	conda install ginjinn -c conda-forge -c AGOberprieler 
-	```
-6. (Windows only) Install pycocotools:
-On linux, pycocotools are automatically installed with ginjinn. On Windows, you will have to install them manually via pip. Make sure, you have the "Visual C++ 2015 build tools" ([download here](https://go.microsoft.com/fwlink/?LinkId=691126)) installed before executing the following command.
-	```
-	pip install "git+https://github.com/philferriere/cocoapi.git#egg=pycocotools&subdirectory=PythonAPI"
-	```
+	This command activates the Conda environment we previously created. This means that packages that are installed via `conda install` will be installed to this environment and do not influence the remaining system.
+	**IMPORTANT**: All subsequent installation steps require that the ginjinn-cpu conda environment is active.
 
-### GPU version
-1. Install software requirements listed at [https://www.tensorflow.org/install/gpu](https://www.tensorflow.org/install/gpu) for tensorflow 1. This will include proprietary NVIDIA drivers and libraries and requires you to create an account at NVIDIA. Make sure your GPU is supported!
-
-2. Install Conda. [Conda](https://docs.conda.io/en/latest/) is an open-source package management system for Python and R, which also includes an environment management system.
-	- Windows ([official guide](https://conda.io/projects/conda/en/latest/user-guide/install/windows.html)):
-		1. Download miniconda Python 3.7 installer from: [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html)
-		2. Run installer. Select the append to Path option.
-	- Linux ([official guide](https://conda.io/projects/conda/en/latest/user-guide/install/linux.html)):
-		1. Download miniconda Python 3.7 via:
-			```bash
-			wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-			```
-		2. Install miniconda. Select append to .bashrc if asked:
-			```bash
-			bash Miniconda3-latest-Linux-x86_64.sh
-			```
-
-3. Setup conda environment.
+3. Install GinJinn for CPU:
+	```bash
+	conda install -c conda-forge -c AGOberprieler ginjinn
 	```
-	conda create -n ginjinn-gpu python=3.6
-	```
+	This command installs GinJinn and its dependencies into the active environment. The `-c` parameters specify additional channels/repositories that should be used.
+	
+	GinJinn is now ready to use.
 
-4. Activate conda environment
-	You will have to run this command every time you want to use ginjinn after closing your terminal. The remaining installation assumes that this environment is activated.
-	```
+#### Linux GPU
+Execute the following commands from your Linux shell.
+1. Install all requirements listed at [https://www.tensorflow.org/install/gpu](https://www.tensorflow.org/install/gpu) for TensorFlow version 1.14. Make also sure your GPU is supported.
+
+2. Create an [Conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html):
+	```bash
+	conda create -n ginjinn-gpu python=3.6 tensorflow-gpu=1.14.0
+	``` 
+	This command will setup a new Conda environment named 'ginjinn-cpu' with the packages Python 3.6 and TensorFlow GPU 1.14.
+
+3. Activate the Conda environment:
+	```bash
 	conda activate ginjinn-gpu
 	```
-5. Install GinJinn
+	This command activates the Conda environment we previously created. This means that packages that are installed via `conda install` will be installed to this environment and do not influence the remaining system.
+	**IMPORTANT**: All subsequent installation steps require that the ginjinn-gpu conda environment is active.
+
+4. Install GinJinn for GPU:
+	```bash
+	conda install -c conda-forge -c AGOberprieler ginjinn-gpu
 	```
-	conda install ginjinn-gpu -c conda-forge -c AGOberprieler 
+	This command installs GinJinn and its dependencies into the active environment. The `-c` parameters specify additional channels/repositories that should be used.
+	
+	GinJinn is now ready to use.
+
+### Windows
+Both versions of GinJinn require [Conda](https://docs.conda.io/en/latest/), an open-source package management system for Python and R, which also includes facilities for environment management system. See the [official installation guide](https://conda.io/projects/conda/en/latest/user-guide/install/windows.html) for further information.
+
+To install Conda, download the installer from [here](https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe
+) and execute it. You should check the option for appending conda to PATH, since this will allow you to call the `conda` command from your terminal.
+
+#### Windows CPU
+All following commands should be executed in a standard CMD terminal.
+
+1. Create an [Conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html):
+	```batch
+	conda create -n ginjinn-cpu python=3.6 tensorflow=1.14.0
+	``` 
+	This command will setup a new Conda environment named 'ginjinn-cpu' with the packages Python 3.6 and TensorFlow 1.14.
+
+2. Activate the Conda environment:
+	```batch
+	conda activate ginjinn-cpu
 	```
-6. Install tensorflow-gpu
-Attention: never install CPU and GPU version in the same conda environment!
+	This command activates the Conda environment we previously created. This means that packages that are installed via `conda install` will be installed to this environment and do not influence the remaining system.
+	**IMPORTANT**: All subsequent installation steps require that the ginjinn-cpu conda environment is active.
+
+3. Install GinJinn for CPU:
+	```batch
+	conda install -c conda-forge -c AGOberprieler ginjinn
 	```
-	pip install tensorflow-gpu==1.14.0
-	```
-7.  (**Windows only**) Install pycocotools:
-On linux, pycocotools are automatically installed with ginjinn. On Windows, you will have to install them manually via pip. Make sure, you have the "Visual C++ 2015 build tools" ([download here](https://go.microsoft.com/fwlink/?LinkId=691126)) installed before executing the following command.
-	```
+	This command installs GinJinn and its dependencies into the active environment. The `-c` parameters specify additional channels/repositories that should be used.
+
+4. Install [pycocotools](https://github.com/philferriere/cocoapi) for windows:
+	```batch
 	pip install "git+https://github.com/philferriere/cocoapi.git#egg=pycocotools&subdirectory=PythonAPI"
 	```
+	This package is necessary for the COCO evaluation metrics that the TensorFlow object detection API uses.
+	
+	GinJinn is now ready to use.
+
+#### Windows GPU
+1. Install all requirements listed at [https://www.tensorflow.org/install/gpu](https://www.tensorflow.org/install/gpu) for TensorFlow version 1.14. Make also sure your GPU is supported.
+2. Create an [Conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html):
+	```batch
+	conda create -n ginjinn-gpu python=3.6 tensorflow-gpu=1.14.0
+	``` 
+	This command will setup a new Conda environment named 'ginjinn-cpu' with the packages Python 3.6 and TensorFlow GPU 1.14.
+
+3. Activate the Conda environment:
+	```batch
+	conda activate ginjinn-gpu
+	```
+	This command activates the Conda environment we previously created. This means that packages that are installed via `conda install` will be installed to this environment and do not influence the remaining system.
+	**IMPORTANT**: All subsequent installation steps require that the ginjinn-gpu conda environment is active.
+
+4. Install GinJinn for GPU:
+	```batch
+	conda install -c conda-forge -c AGOberprieler ginjinn-gpu
+	```
+	This command installs GinJinn and its dependencies into the active environment. The `-c` parameters specify additional channels/repositories that should be used.
+
+5. Install [pycocotools](https://github.com/philferriere/cocoapi) for windows:
+	```batch
+	pip install "git+https://github.com/philferriere/cocoapi.git#egg=pycocotools&subdirectory=PythonAPI"
+	```
+	This package is necessary for the COCO evaluation metrics that the TensorFlow object detection API uses.
+	
+	GinJinn is now ready to use.
 
 ## Usage
 Make sure to activate your conda environment via `conda activate MY_ENV_NAME` prior to running any ginjinn command.
