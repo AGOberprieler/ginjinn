@@ -19,6 +19,7 @@ requirements:
   run:
     - python 3.6
     - protobuf 3.9.2
+    - tensorflow
     - tensorflow_models
     - numpy
     - pandas

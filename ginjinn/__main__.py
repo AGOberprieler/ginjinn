@@ -41,10 +41,10 @@ def main():
         p.setup_model()
         print('Successfully setup model ...')
         return_code = p.train_and_eval()
-        print('return_code', return_code)
+        raise Exception('Training interrupted')
         print('Successfully trained model ...')
         return_code = p.export_model()
-        print('return_code', return_code)
+        raise Exception('Export interrupted')
         print('Successfully exported model ...')
         print('Project ready for detection.')
 
@@ -80,8 +80,9 @@ def main():
                 return_code = p.train_and_eval()
             except:
                 raise Exception('Model was already trained. Run command with -f/--force to overwrite previous training, or with -c/--continue_training to continue the previous training.')
-
-        print('return_code', return_code)
+        
+        if not return_code == 0:
+            raise Exception('Training interrupted')
         print('Successfully trained model.')
 
     # export
