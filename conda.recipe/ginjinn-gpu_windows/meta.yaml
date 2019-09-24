@@ -8,36 +8,30 @@ source:
 
 requirements:
   build:
-    - python 3.6.*
-    - setuptools
+    - python 3.6
     - protobuf 3.9.2
-    - tensorflow_models
-    - numpy 1.16.*
-    - pandas
+    - setuptools
+    - numpy 1.16.5
     - pip
-    - cython
-    - pillow
-    - matplotlib
+    - cython 0.29.13
     - importlib_resources
-    - jinja2
-    - scikit-learn
-    - tqdm
-    - pyyaml
-    - requests
+    - pillow
 
   run:
-    - python 3.6.*
-    - protobuf 3.9.2
+    - python 3.6
+    - jinja2
+    - pillow
+    - requests
     - tensorflow_models
-    - numpy 1.16.*
+    - scikit-learn
+    - protobuf 3.9
+    - cython
     - pandas
+    - numpy
     - matplotlib
     - importlib_resources
-    - jinja2
-    - scikit-learn
     - tqdm
     - pyyaml
-    - requests
 
 build:
   skip: True  # [not win]
