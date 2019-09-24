@@ -17,20 +17,115 @@ requirements:
     - importlib_resources
 
   run:
-    - python 3.6
-    - protobuf 3.9.2
-    - tensorflow 1.14
-    - tensorflow_models
-    - numpy 1.16.5
+    - absl-py 0.8.0
+    - asn1crypto 0.24.0
+    - astor 0.8.0
+    - blas 1.0
+    - c-ares 1.15.0
+    - ca-certificates 2019.9.11
+    - certifi 2019.9.11
+    - cffi 1.12.3
+    - chardet 3.0.4
+    - cryptography 2.7
+    - cycler 0.10.0
     - cython 0.29.13
-    - pandas
-    - matplotlib
-    - importlib_resources
-    - jinja2
-    - scikit-learn
-    - tqdm
-    - pyyaml
-    - requests
+    - dbus 1.13.6
+    - expat 2.2.6
+    - fontconfig 2.13.1
+    - freetype 2.10.0
+    - gast 0.2.2
+    - gettext 0.19.8.1
+    - ginjinn 0.3.1
+    - git 2.20.1
+    - glib 2.58.3
+    - google-pasta 0.1.7
+    - grpcio 1.16.1
+    - gst-plugins-base 1.14.5
+    - gstreamer 1.14.5
+    - h5py 2.9.0
+    - hdf5 1.10.4
+    - icu 58.2
+    - idna 2.8
+    - importlib_resources 1.0.2
+    - intel-openmp 2019.4
+    - jinja2 2.10.1
+    - joblib 0.13.2
+    - jpeg 9c
+    - keras-applications 1.0.8
+    - keras-preprocessing 1.1.0
+    - kiwisolver 1.1.0
+    - krb5 1.16.1
+    - libcurl 7.65.3
+    - libedit 3.1.20181
+    - libffi 3.2.1
+    - libgcc-ng 9.1.0
+    - libgfortran-ng 7.3.0
+    - libiconv 1.15
+    - libpng 1.6.37
+    - libprotobuf 3.9.2
+    - libssh2 1.8.2
+    - libstdcxx-ng 9.1.0
+    - libtiff 4.0.10
+    - libuuid 2.32.1
+    - libxcb 1.13
+    - libxml2 2.9.9
+    - lz4-c 1.8.3
+    - markdown 3.1.1
+    - markupsafe 1.1.1
+    - matplotlib 3.1.1
+    - mkl 2019.4
+    - mkl-service 2.3.0
+    - mkl_fft 1.0.14
+    - mkl_random 1.0.2
+    - ncurses 6.1
+    - numpy 1.16.5
+    - numpy-base 1.16.5
+    - olefile 0.46
+    - openssl 1.1.1c
+    - pandas 0.25.1
+    - pcre 8.41
+    - perl 5.26.2
+    - pillow 6.1.0
+    - pip 19.2.2
+    - protobuf 3.9.2
+    - pthread-stubs 0.4
+    - pycparser 2.19
+    - pyopenssl 19.0.0
+    - pyparsing 2.4.2
+    - pyqt 5.9.2
+    - pysocks 1.7.1
+    - python 3.6.9
+    - python-dateutil 2.8.0
+    - pytz 2019.2
+    - pyyaml 5.1.2
+    - qt 5.9.7
+    - readline 7.0
+    - requests 2.22.0
+    - scikit-learn 0.21.2
+    - scipy 1.3.1
+    - setuptools 41.2.0
+    - sip 4.19.8
+    - six 1.12.0
+    - sqlite 3.29.0
+    - tensorboard 1.14.0
+    - tensorflow 1.14.0
+    - tensorflow-base 1.14.0
+    - tensorflow-estimator 1.14.0
+    - tensorflow_models 1.11
+    - termcolor 1.1.0
+    - tk 8.6.8
+    - tornado 6.0.3
+    - tqdm 4.36.1
+    - urllib3 1.25.5
+    - werkzeug 0.16.0
+    - wheel 0.33.6
+    - wrapt 1.11.2
+    - xorg-libxau 1.0.9
+    - xorg-libxdmcp 1.1.3
+    - xz 5.2.4
+    - yaml 0.1.7
+    - zlib 1.2.11
+    - zstd 1.4.0
 
 build:
   skip: true # [not linux]
