@@ -386,3 +386,78 @@ image_files_parser.add_argument(
     choices=['train', 'eval']
 )
 
+# detect
+utils_detect_parser = utils_subparsers.add_parser(
+    'detect',
+    help='''
+        Standalone detection. Requires only exported model and labelmap.
+    ''',
+    description='''
+        Standalone detection. Requires only exported model and labelmap.
+    ''',
+)
+
+utils_detect_parser.add_argument(
+    'frozen_inference_graph',
+    type=str,
+    help='Path to frozen_inference_graph.pb.',
+)
+
+utils_detect_parser.add_argument(
+    'labelmap_path',
+    type=str,
+    help='Path to labelmap, which was used to export frozen_inference_graph.',
+)
+
+utils_detect_parser.add_argument(
+    'image_path',
+    type=str,
+    help='Path to directory containing images, or to a single image.',
+)
+
+utils_detect_parser.add_argument(
+    'out_dir',
+    type=str,
+    help='Path to output directory.',
+)
+
+utils_detect_parser.add_argument(
+    '-t', '--output_types',
+    help='''
+        The type of output to generate: separate images with bounding
+        boxes for each class (-t ibb), extracted bounding boxes (-t ebb), ".csv" file with
+        absolute and realtive bounding box locations and bounding box scores (-t csv).
+        For multiple outputs, you have to repeat the command, e.g. -t ibb -t ebb for ibb and ebb.
+    ''',
+    nargs='+',
+    choices=['ibb', 'ebb', 'csv'],
+    action='append'
+)
+
+utils_detect_parser.add_argument(
+    '-p', '--padding',
+    help='''
+        Additional padding for the extraction of bounding boxes if output type "ebb" is selected.
+    ''',
+    type=int,
+    default=0,
+)
+
+utils_detect_parser.add_argument(
+    '-s', '--score_threshold',
+    help='''
+        Threshold for the bounding box quality score. Bounding boxes below the threshold will not be
+        present in the output. 
+    ''',
+    type=float,
+    default=0.5,
+)
+
+utils_detect_parser.add_argument(
+    '-f', '--force',
+    help='''
+        Force overwrite output_dir. This will overwrite existing data, but NOT delete the directory.
+    ''',
+    action='store_true',
+    default=False,
+)

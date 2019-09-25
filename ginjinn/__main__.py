@@ -176,17 +176,45 @@ def main():
         if args.utils_command == 'download_checkpoint':
             from ginjinn.utils.download_pretrained_model import download_pretrained_model
             download_pretrained_model(args.model_name, args.out_dir)
+
         # image_files
-        if args.utils_command == 'image_files':
+        elif args.utils_command == 'image_files':
             p = Project.from_directory(args.project_dir)
             if (args.type == 'train'):
                 print('\n'.join(p.get_train_image_files()))
             elif (args.type == 'eval'):
                 print('\n'.join(p.get_eval_image_files()))
+
         # data_summary
-        if args.utils_command == 'data_summary':
+        elif args.utils_command == 'data_summary':
             p = Project.from_directory(args.project_dir)
             p.print_dataset_summary()
+        
+        # detect
+        elif args.utils_command == 'detect':
+            from ginjinn.core import tf_detector
+            # argparse outputs this as list of lists, so we have to convert it to a list
+            if not args.output_types:
+                output_types = ['ibb']
+            else:
+                output_types = [t[0] for t in args.output_types]
+
+            out_path = Path(args.out_dir)
+            if out_path.exists():
+                if not args.force:
+                    raise Exception('Output directory already exists. Select another directory or rerun with -f/--force to overwrite the data.')
+
+            detector = tf_detector.TFDetector(args.frozen_inference_graph, args.labelmap_path)
+            detector.run_detection(
+                args.out_dir,
+                args.image_path,
+                output_types,
+                padding=args.padding,
+                th=args.score_threshold,
+            )
+
+            print('Successfully ran detection.')
+            print(f'Detection data written to {args.out_dir}')
 
 
 if __name__ == '__main__':
