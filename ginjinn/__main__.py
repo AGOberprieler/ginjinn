@@ -38,14 +38,20 @@ def main():
         p.setup_dataset()
         p.print_dataset_summary()
         print('Successfully setup dataset ...')
+
         p.setup_model()
         print('Successfully setup model ...')
+
         return_code = p.train_and_eval()
-        raise Exception('Training interrupted')
+        if not return_code == 0:
+            raise Exception(f'Training interrupted. Return code: {return_code}')
         print('Successfully trained model ...')
+
         return_code = p.export_model()
-        raise Exception('Export interrupted')
+        if not return_code == 0:
+            raise Exception(f'Export interrupted. Return code: {return_code}')
         print('Successfully exported model ...')
+
         print('Project ready for detection.')
 
     # setup_dataset
@@ -82,7 +88,7 @@ def main():
                 raise Exception('Model was already trained. Run command with -f/--force to overwrite previous training, or with -c/--continue_training to continue the previous training.')
         
         if not return_code == 0:
-            raise Exception('Training interrupted')
+            raise Exception(f'Training interrupted. Return code: {return_code}')
         print('Successfully trained model.')
 
     # export
@@ -101,10 +107,12 @@ def main():
         
         ckpt = args.checkpoint_name or None
         try:
-            p.export_model(ckpt)
+            return_code = p.export_model(ckpt)
         except:
             raise Exception('Model was already exported. Run command with -f/--force to overwrite previous exports.')
-
+        
+        if not return_code == 0:
+            raise Exception(f'Export interrupted. Return code: {return_code}')
         print('Successfully exported model.')
 
     # detect
