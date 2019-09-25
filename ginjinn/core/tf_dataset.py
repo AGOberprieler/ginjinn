@@ -204,7 +204,7 @@ class TFDataset:
             return self.config.labelmap_path
         else:
             return None
-
+    
     @property
     def n_classes(self):
         if self.is_ready():
@@ -264,7 +264,24 @@ class TFDataset:
             f'\t- #objects/class: {summary["n_samples_per_class"]}',
         ])
         print(msg)
+    
+    def get_training_image_files(self):
+        if not self.is_ready():
+            return None
         
+        fnames = _filenames_from_annotation_csv(self.config.csv_train_path)
+        fnames = [str(Path(self.config.image_dir).joinpath(f).resolve()) for f in fnames]
+
+        return fnames
+    
+    def get_eval_image_files(self):
+        if not self.is_ready():
+            return None
+        
+        fnames = _filenames_from_annotation_csv(self.config.csv_eval_path)
+        fnames = [str(Path(self.config.image_dir).joinpath(f).resolve()) for f in fnames]
+
+        return fnames
 
 
 
@@ -286,6 +303,13 @@ def _get_n_samples_from_csv(file_path):
 def _get_n_images_from_csv(file_path):
     df = pd.read_csv(file_path)
     return df['filename'].nunique()
+
+
+def _filenames_from_annotation_csv(annotations_file):
+    annotations = pd.read_csv(annotations_file)
+    image_files = annotations['filename'].unique()
+
+    return image_files
 
 '''
 MIT License

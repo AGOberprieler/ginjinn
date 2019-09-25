@@ -176,6 +176,17 @@ def main():
         if args.utils_command == 'download_checkpoint':
             from ginjinn.utils.download_pretrained_model import download_pretrained_model
             download_pretrained_model(args.model_name, args.out_dir)
+        # image_files
+        if args.utils_command == 'image_files':
+            p = Project.from_directory(args.project_dir)
+            if (args.type == 'train'):
+                print('\n'.join(p.get_train_image_files()))
+            elif (args.type == 'eval'):
+                print('\n'.join(p.get_eval_image_files()))
+        # data_summary
+        if args.utils_command == 'data_summary':
+            p = Project.from_directory(args.project_dir)
+            p.print_dataset_summary()
 
 
 if __name__ == '__main__':

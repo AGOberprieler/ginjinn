@@ -341,3 +341,48 @@ download_checkpoint_parser.add_argument(
         Directory, which the pretrained model checkpoint will be downloaded to.
     ''',
 )
+
+# data_summary
+data_summary_parser = utils_subparsers.add_parser(
+    'data_summary',
+    help='''
+        Print the summary of the dataset.
+    ''',
+    description='''
+        Print the summary of the dataset.
+    ''',
+)
+
+data_summary_parser.add_argument(
+    'project_dir',
+    type=str,
+    help='Path to existing project directory. Requires the successfull setup of the dataset.',
+)
+
+
+# image_files
+image_files_parser = utils_subparsers.add_parser(
+    'image_files',
+    help='''
+        List the file paths of training or evaluation images files.
+    ''',
+    description='''
+        List the file paths of training or evaluation images files.
+    ''',
+)
+
+image_files_parser.add_argument(
+    'project_dir',
+    type=str,
+    help='Path to existing project directory. Requires the successfull setup of the dataset.',
+)
+
+image_files_parser.add_argument(
+    'type',
+    type=str,
+    help='''
+        Type of images to list: training or evalution.
+    ''',
+    choices=['train', 'eval']
+)
+

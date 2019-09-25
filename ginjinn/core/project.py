@@ -144,7 +144,7 @@ class Project:
         if _config['checkpoint_path']:
             _config['checkpoint_path'] = str(Path(_config['checkpoint_path']).resolve(strict=True))
 
-        print(_config)
+        # print(_config)
 
         self.config.update(_config)
 
@@ -517,3 +517,15 @@ class Project:
 
         dataset = self._load_dataset()
         dataset.print_summary()
+    
+    def get_train_image_files(self):
+        self._assert_dataset_is_ready()
+
+        ds = self._load_dataset()
+        return ds.get_training_image_files()
+
+    def get_eval_image_files(self):
+        self._assert_dataset_is_ready()
+
+        ds = self._load_dataset()
+        return ds.get_eval_image_files()
