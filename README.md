@@ -1,7 +1,7 @@
 # GinJinn
 GinJinn is an object detection command-line (Linux shell and Windows cmd) pipeline for the extraction of structures from digital images of herbarium specimens based on the [TensorFlow object detection API](https://github.com/tensorflow/models/tree/master/research/object_detection). 
 
-GinJinn simplifies the management of object detection projects by automaticcaly converting annotated images to TensorFlow record format and setting up model pipeline configurations, and provides an easy interface to training and export functionality. Additionally, GinJinn provides a command for instantly using trained and exported models for the detection of objects in new data.
+GinJinn simplifies the management of object detection projects by automaticaly converting annotated images to TensorFlow record format and setting up model pipeline configurations, and provides an easy interface to training and export functionality. Additionally, GinJinn provides a command for instantly using trained and exported models for the detection of objects in new data.
 
 See [Installation](#installation) for installation instructions on Windows and Linux. Mac is not supported.
 
