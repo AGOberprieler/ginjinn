@@ -1,3 +1,8 @@
+### Attention
+
+GinJinn is being reimplemented, reworked and extended in the Detectron2 framework. That means that the Tensorflow support will be dropped completely when this process is completed. We expect to release version 1.0 till end of 2020, which will include the possibility to apply instance and semantic segmentation models.
+
+
 # GinJinn
 GinJinn is an object detection command-line (Linux shell and Windows cmd) pipeline for the extraction of structures from digital images of herbarium specimens based on the [TensorFlow object detection API](https://github.com/tensorflow/models/tree/master/research/object_detection). 
 
