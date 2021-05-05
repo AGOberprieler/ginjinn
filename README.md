@@ -1,6 +1,6 @@
-### Attention
+## Attention
 
-GinJinn is being reimplemented, reworked and extended in the Detectron2 framework. That means that the Tensorflow support will be dropped as soon as this process is completed. We expect to release version 1.0 till end of 2020, which will include the possibility to apply instance and semantic segmentation models.
+This version of GinJinn is discontinued. See [GinJinn2](https://github.com/AGOberprieler/GinJinn2) for the recent version.
 
 
 # GinJinn
